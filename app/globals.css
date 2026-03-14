@@ -111,14 +111,23 @@ main {
   .nav-links-desktop, .search-desktop { display: none !important; }
 
   /* Hero section */
-  .hero-slide { height: 320px !important; min-height: 320px !important; }
-  .hero-content h1 { font-size: 28px !important; }
-  .hero-content p { font-size: 14px !important; }
-  .hero-stats { flex-direction: column !important; gap: 8px !important; padding: 12px !important; }
-  .hero-stats > div { font-size: 13px !important; }
+  .hero-slide { height: 380px !important; min-height: 380px !important; }
+  .hero-content h1 { font-size: 26px !important; line-height: 1.2 !important; }
+  .hero-content p { font-size: 13px !important; margin-top: 12px !important; }
+  .hero-stats { gap: 20px !important; padding: 10px 16px !important; justify-content: space-around !important; }
+  .hero-stats > div { gap: 4px !important; }
+  .hero-stats span:first-child { font-size: 18px !important; }
+  .hero-stats span:last-child { font-size: 11px !important; }
+  .hero-stats .stat-divider { display: none !important; }
 
   /* Article cards grid */
   .article-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+
+  /* Article card actions — smaller on mobile */
+  .ant-card .ant-space { gap: 2px !important; }
+
+  /* Page max width padding */
+  .page-wrapper { padding: 24px 16px !important; }
 
   /* Post detail page */
   .post-cover { height: 220px !important; max-height: 220px !important; }
@@ -159,10 +168,10 @@ main {
 
 /* Small phones (≤480px) */
 @media (max-width: 480px) {
-  .hero-slide { height: 260px !important; min-height: 260px !important; }
+  .hero-slide { height: 340px !important; min-height: 340px !important; }
   .hero-content h1 { font-size: 22px !important; }
-  .hero-buttons { flex-direction: column !important; gap: 8px !important; }
-  .hero-buttons .ant-btn { width: 100% !important; }
+  .hero-content p { display: none !important; }
+  .hero-buttons .ant-btn { height: 40px !important; padding: 0 20px !important; font-size: 13px !important; }
 
   /* Footer stacks to 1 column */
   .footer-grid { grid-template-columns: 1fr !important; }

@@ -248,11 +248,11 @@ export default function Hero() {
             { value: "1.2M", label: "Articles Published" },
             { value: "10M+", label: "Monthly Readers" },
           ].map((stat, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "center", gap: 48 }}>
-              {i > 0 && <div style={{ width: 1, height: 28, background: "rgba(255,255,255,0.15)" }} />}
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ fontSize: 24, fontWeight: 800, color: "#ffffff" }}>{stat.value}</span>
-                <span style={{ fontSize: 13, color: "rgba(191,219,254,0.8)" }}>{stat.label}</span>
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              {i > 0 && <div className="stat-divider" style={{ width: 1, height: 28, background: "rgba(255,255,255,0.15)", marginRight: 10 }} />}
+              <div style={{ textAlign: "center" }}>
+                <span style={{ fontSize: 22, fontWeight: 800, color: "#ffffff", display: "block" }}>{stat.value}</span>
+                <span style={{ fontSize: 12, color: "rgba(191,219,254,0.8)" }}>{stat.label}</span>
               </div>
             </div>
           ))}

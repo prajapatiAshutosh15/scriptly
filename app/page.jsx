@@ -57,7 +57,7 @@ export default async function Home() {
   return (
     <>
       <Hero />
-      <div style={{
+      <div className="page-wrapper" style={{
         maxWidth: 1280,
         margin: "0 auto",
         padding: "40px 24px",
