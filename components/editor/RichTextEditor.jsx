@@ -20,7 +20,7 @@ import {
   UndoOutlined,
   RedoOutlined,
 } from "@ant-design/icons";
-import { useCallback } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import TurndownService from "turndown";
 
 // HTML to Markdown converter
@@ -31,6 +31,8 @@ const turndown = new TurndownService({
 });
 
 export default function RichTextEditor({ content, onChange }) {
+  const hasLoadedContent = useRef(false);
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -59,6 +61,28 @@ export default function RichTextEditor({ content, onChange }) {
       },
     },
   });
+
+  // Update editor content when content prop changes (edit mode)
+  useEffect(() => {
+    if (editor && content && !hasLoadedContent.current) {
+      // Convert markdown to basic HTML for the editor
+      const html = content
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/^- (.+)$/gm, '<li>$1</li>')
+        .replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>')
+        .replace(/^> (.+)$/gm, '<blockquote><p>$1</p></blockquote>')
+        .replace(/\n\n/g, '</p><p>')
+        .replace(/^(?!<[hlubo])(.+)$/gm, '<p>$1</p>');
+
+      editor.commands.setContent(html || content);
+      hasLoadedContent.current = true;
+    }
+  }, [editor, content]);
 
   const addLink = useCallback(() => {
     const url = window.prompt("Enter URL:");

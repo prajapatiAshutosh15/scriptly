@@ -39,25 +39,29 @@ export default function WritePage() {
     }
   }, [isAuthenticated]);
 
-  // Load existing post for editing
+  // Load existing post for editing (wait for tags to load first)
+  const [editLoading, setEditLoading] = useState(false);
   useEffect(() => {
-    if (editSlug && isAuthenticated) {
+    if (editSlug && isAuthenticated && tags.length > 0) {
       setIsEditMode(true);
+      setEditLoading(true);
       api.get(`/posts/${editSlug}`).then((res) => {
         const post = res.data;
         if (post) {
           setTitle(post.title || "");
           setContent(post.content || "");
           setCoverImage(post.cover_image || "");
-          if (post.tags) {
+          if (post.tags && post.tags.length > 0) {
             setSelectedTags(post.tags.map((t) => t.id));
           }
         }
       }).catch(() => {
         message.error("Failed to load post for editing");
+      }).finally(() => {
+        setEditLoading(false);
       });
     }
-  }, [editSlug, isAuthenticated]);
+  }, [editSlug, isAuthenticated, tags.length]);
 
   const toggleTag = useCallback((tagId) => {
     setSelectedTags((prev) =>
@@ -160,6 +164,15 @@ export default function WritePage() {
   }, [title, content, coverImage, getTagPayload]);
 
   if (!isAuthenticated) return null;
+
+  if (editLoading) {
+    return (
+      <div style={{ maxWidth: 800, margin: "0 auto", padding: "48px 24px" }}>
+        <Skeleton active paragraph={{ rows: 1 }} title={{ width: "60%" }} />
+        <Skeleton active paragraph={{ rows: 12 }} style={{ marginTop: 24 }} />
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight: "calc(100vh - 64px)" }}>
