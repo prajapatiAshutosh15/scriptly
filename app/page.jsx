@@ -8,7 +8,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 async function fetchPosts() {
   try {
     const res = await fetch(API_URL + "/posts?limit=12", {
-      next: { revalidate: 60 },
+      cache: 'no-store',
     });
     if (!res.ok) return [];
     const json = await res.json();
@@ -22,7 +22,7 @@ async function fetchPosts() {
 async function fetchTags() {
   try {
     const res = await fetch(API_URL + "/tags", {
-      next: { revalidate: 300 },
+      cache: 'no-store',
     });
     if (!res.ok) return [];
     const json = await res.json();
@@ -36,7 +36,7 @@ async function fetchTags() {
 async function fetchFeaturedPosts() {
   try {
     const res = await fetch(API_URL + "/posts?featured=true&limit=3", {
-      next: { revalidate: 300 },
+      cache: 'no-store',
     });
     if (!res.ok) return [];
     const json = await res.json();

@@ -134,6 +134,11 @@ export default function PostPageContent({ post, postComments, relatedPosts }) {
             {/* Author Actions */}
             {isAuthor && (
               <Space size={8}>
+                <Link href={`/write?edit=${post.slug}`}>
+                  <Button icon={<EditOutlined />} shape="round" size="small">
+                    Edit
+                  </Button>
+                </Link>
                 <Popconfirm
                   title="Delete this post?"
                   description="This action cannot be undone."

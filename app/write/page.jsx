@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback, lazy, Suspense } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Input, Modal, Tag, Space, Typography, message, Upload, Skeleton } from "antd";
 import { UploadOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import api from "@/services/api";
@@ -13,6 +13,8 @@ const { Text } = Typography;
 
 export default function WritePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const editSlug = searchParams.get("edit");
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -25,6 +27,7 @@ export default function WritePage() {
   const [coverUploading, setCoverUploading] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [savingDraft, setSavingDraft] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) router.replace("/signin");
@@ -35,6 +38,26 @@ export default function WritePage() {
       api.get("/tags").then((res) => setTags(res.data || [])).catch(() => setTags([]));
     }
   }, [isAuthenticated]);
+
+  // Load existing post for editing
+  useEffect(() => {
+    if (editSlug && isAuthenticated) {
+      setIsEditMode(true);
+      api.get(`/posts/${editSlug}`).then((res) => {
+        const post = res.data;
+        if (post) {
+          setTitle(post.title || "");
+          setContent(post.content || "");
+          setCoverImage(post.cover_image || "");
+          if (post.tags) {
+            setSelectedTags(post.tags.map((t) => t.id));
+          }
+        }
+      }).catch(() => {
+        message.error("Failed to load post for editing");
+      });
+    }
+  }, [editSlug, isAuthenticated]);
 
   const toggleTag = useCallback((tagId) => {
     setSelectedTags((prev) =>
@@ -95,13 +118,23 @@ export default function WritePage() {
     setPublishing(true);
     try {
       const tagPayload = getTagPayload();
-      const res = await api.post("/posts", {
-        title, content, cover_image: coverImage || null,
-        ...tagPayload, status: "published",
-      });
-      message.success("Published!");
+      let res;
+      if (isEditMode && editSlug) {
+        res = await api.patch(`/posts/${editSlug}`, {
+          title, content, cover_image: coverImage || null,
+          ...tagPayload, status: "published",
+        });
+        message.success("Post updated!");
+      } else {
+        res = await api.post("/posts", {
+          title, content, cover_image: coverImage || null,
+          ...tagPayload, status: "published",
+        });
+        message.success("Published!");
+      }
       setShowPublish(false);
-      if (res.data?.slug) router.push(`/post/${res.data.slug}`);
+      const slug = res.data?.slug || editSlug;
+      if (slug) router.push(`/post/${slug}`);
     } catch (err) {
       message.error(err?.error?.message || "Failed to publish");
     } finally {
@@ -144,7 +177,9 @@ export default function WritePage() {
         />
         <Space>
           <Button shape="round" onClick={handleSaveDraft} loading={savingDraft}>Save Draft</Button>
-          <Button type="primary" shape="round" onClick={() => setShowPublish(true)}>Publish</Button>
+          <Button type="primary" shape="round" onClick={() => setShowPublish(true)}>
+            {isEditMode ? "Update" : "Publish"}
+          </Button>
         </Space>
       </div>
 
@@ -157,11 +192,11 @@ export default function WritePage() {
 
       {/* Publish Modal */}
       <Modal
-        title="Publish Article"
+        title={isEditMode ? "Update Article" : "Publish Article"}
         open={showPublish}
         onCancel={() => setShowPublish(false)}
         onOk={handlePublish}
-        okText="Publish Now"
+        okText={isEditMode ? "Update Now" : "Publish Now"}
         okButtonProps={{ shape: "round", loading: publishing }}
         cancelButtonProps={{ shape: "round" }}
       >
