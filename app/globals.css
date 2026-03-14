@@ -86,13 +86,14 @@ main {
 .trending-item:hover { background: rgba(0,0,0,0.02); }
 .dark .trending-item:hover { background: rgba(255,255,255,0.03); }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .hidden-mobile { display: none !important; }
-  .mobile-only { display: inline-flex !important; }
-  .nav-links-desktop, .search-desktop { display: none !important; }
-}
+/* Mobile menu button — hidden by default, shown on mobile */
+.mobile-only { display: none !important; }
 
+/* ═══════════════════════════════════════ */
+/* RESPONSIVE — Mobile First              */
+/* ═══════════════════════════════════════ */
+
+/* Tablet and below (≤1024px) */
 @media (max-width: 1024px) {
   .home-grid { grid-template-columns: 1fr !important; }
   .sidebar-desktop { display: none; }
@@ -101,6 +102,84 @@ main {
   .post-grid { grid-template-columns: 1fr !important; }
   .reaction-desktop, .toc-desktop { display: none !important; }
   .reaction-mobile { display: block !important; }
+}
+
+/* Mobile (≤768px) */
+@media (max-width: 768px) {
+  .hidden-mobile { display: none !important; }
+  .mobile-only { display: inline-flex !important; }
+  .nav-links-desktop, .search-desktop { display: none !important; }
+
+  /* Hero section */
+  .hero-slide { height: 320px !important; min-height: 320px !important; }
+  .hero-content h1 { font-size: 28px !important; }
+  .hero-content p { font-size: 14px !important; }
+  .hero-stats { flex-direction: column !important; gap: 8px !important; padding: 12px !important; }
+  .hero-stats > div { font-size: 13px !important; }
+
+  /* Article cards grid */
+  .article-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
+
+  /* Post detail page */
+  .post-cover { height: 220px !important; max-height: 220px !important; }
+  .post-author-section { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+
+  /* Prose content on mobile */
+  .prose h1 { font-size: 1.625rem; }
+  .prose h2 { font-size: 1.375rem; }
+  .prose h3 { font-size: 1.125rem; }
+  .prose p { font-size: 1rem; line-height: 1.75; }
+  .prose pre { font-size: 0.8rem; padding: 0.875rem; }
+
+  /* Footer grid */
+  .footer-grid { grid-template-columns: 1fr 1fr !important; gap: 24px !important; }
+
+  /* Profile page */
+  .profile-header { padding: 24px 16px !important; }
+  .profile-stats { flex-wrap: wrap !important; gap: 16px !important; }
+  .profile-grid { grid-template-columns: 1fr !important; }
+
+  /* Pricing cards */
+  .pricing-grid { grid-template-columns: 1fr !important; }
+
+  /* About/careers grids */
+  .values-grid, .team-grid, .perks-grid, .jobs-grid { grid-template-columns: 1fr !important; }
+
+  /* Write page */
+  .write-toolbar { padding: 6px 12px !important; }
+  .write-editor { padding: 24px 16px !important; }
+
+  /* Search results */
+  .search-results-grid { grid-template-columns: 1fr !important; }
+
+  /* General spacing */
+  .page-container { padding: 16px !important; }
+  .section-padding { padding: 24px 16px !important; }
+}
+
+/* Small phones (≤480px) */
+@media (max-width: 480px) {
+  .hero-slide { height: 260px !important; min-height: 260px !important; }
+  .hero-content h1 { font-size: 22px !important; }
+  .hero-buttons { flex-direction: column !important; gap: 8px !important; }
+  .hero-buttons .ant-btn { width: 100% !important; }
+
+  /* Footer stacks to 1 column */
+  .footer-grid { grid-template-columns: 1fr !important; }
+
+  /* Card adjustments */
+  .ant-card { border-radius: 12px !important; }
+  .ant-card .ant-card-body { padding: 14px !important; }
+
+  /* Sign in page */
+  .signin-card { margin: 12px !important; padding: 4px !important; }
+
+  /* Modal on small screens */
+  .ant-modal { max-width: calc(100vw - 24px) !important; margin: 12px !important; }
+  .ant-modal .ant-modal-content { padding: 16px !important; }
+
+  /* Drawer full width on small phones */
+  .ant-drawer .ant-drawer-content-wrapper { max-width: 100vw !important; }
 }
 
 /* Prose styles for article content */

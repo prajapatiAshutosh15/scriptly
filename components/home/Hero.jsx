@@ -50,6 +50,7 @@ export default function Hero() {
           {slides.map((slide, index) => (
             <div
               key={index}
+              className="hero-slide"
               style={{
                 position: "relative",
                 flex: "0 0 100%",
@@ -88,7 +89,7 @@ export default function Hero() {
                 display: "flex",
                 alignItems: "center",
               }}>
-                <div style={{ maxWidth: 640 }}>
+                <div className="hero-content" style={{ maxWidth: 640 }}>
                   <h1 style={{
                     color: "#ffffff",
                     fontSize: 48,
@@ -119,7 +120,7 @@ export default function Hero() {
                     {slide.description}
                   </p>
 
-                  <Space size={16} style={{ marginTop: 28 }}>
+                  <Space size={16} style={{ marginTop: 28 }} className="hero-buttons">
                     <Link href="/write">
                       <Button
                         type="primary"
@@ -241,7 +242,7 @@ export default function Hero() {
           justifyContent: "center",
           gap: 48,
           flexWrap: "wrap",
-        }}>
+        }} className="hero-stats">
           {[
             { value: "50K+", label: "Active Writers" },
             { value: "1.2M", label: "Articles Published" },

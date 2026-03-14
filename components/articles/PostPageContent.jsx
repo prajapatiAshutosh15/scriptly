@@ -66,7 +66,7 @@ export default function PostPageContent({ post, postComments, relatedPosts }) {
         marginBottom: 32,
         height: 400,
         maxHeight: "50vh",
-      }}>
+      }} className="post-cover">
         <img
           src={post.coverImage || getDefaultCover(post.slug || post.id)}
           alt={post.title}
@@ -111,7 +111,7 @@ export default function PostPageContent({ post, postComments, relatedPosts }) {
             paddingBottom: 24,
             marginBottom: 32,
             borderBottom: "1px solid var(--border-color)",
-          }}>
+          }} className="post-author-section">
             <Link href={`/user/${post.author.username}`}>
               <Avatar src={post.author.avatar} size={56}>{post.author.name[0]}</Avatar>
             </Link>

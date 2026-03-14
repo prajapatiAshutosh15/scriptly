@@ -126,7 +126,6 @@ export default function Navbar() {
               icon={<MenuOutlined />}
               onClick={() => setMobileOpen(true)}
               className="mobile-only"
-              style={{ display: "none" }}
             />
           </Space>
         </div>
