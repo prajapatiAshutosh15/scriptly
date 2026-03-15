@@ -1,42 +1,50 @@
 import { notFound } from "next/navigation";
-import { normalizeUser, normalizePost } from "@/lib/normalizers";
+import { normalizeUser, normalizePost, extractList } from "@/lib/normalizers";
 import ProfilePageContent from "@/components/profile/ProfilePageContent";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
+async function fetchUser(username) {
+  try {
+    const res = await fetch(`${API_URL}/users/${username}`, { cache: 'no-store' });
+    if (!res.ok) return null;
+    const json = await res.json();
+    if (!json.success) return null;
+    return normalizeUser(json.data);
+  } catch {
+    return null;
+  }
+}
+
+async function fetchUserPosts(username) {
+  try {
+    const res = await fetch(`${API_URL}/posts?author=${username}&limit=20`, { cache: 'no-store' });
+    if (!res.ok) return [];
+    const json = await res.json();
+    if (!json.success) return [];
+    const list = extractList(json, 'posts');
+    return list.map(normalizePost).filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
 export async function generateMetadata({ params }) {
   const { username } = await params;
-  try {
-    const res = await fetch(API_URL + '/users/' + username, { cache: 'no-store' });
-    if (!res.ok) return {};
-    const json = await res.json();
-    const user = normalizeUser(json.data);
-    if (!user) return {};
-    return { title: user.name, description: user.bio };
-  } catch {
-    return {};
-  }
+  const user = await fetchUser(username);
+  if (!user) return {};
+  return { title: user.name, description: user.bio };
 }
 
 export default async function UserProfilePage({ params }) {
   const { username } = await params;
 
-  // Fetch user profile
-  const userRes = await fetch(API_URL + '/users/' + username, { cache: 'no-store' });
-  if (!userRes.ok) notFound();
-  const userJson = await userRes.json();
-  const author = normalizeUser(userJson.data);
-  if (!author) notFound();
+  const [author, userPosts] = await Promise.all([
+    fetchUser(username),
+    fetchUserPosts(username),
+  ]);
 
-  // Fetch user's posts
-  let userPosts = [];
-  try {
-    const postsRes = await fetch(API_URL + '/users/' + username + '/posts', { cache: 'no-store' });
-    if (postsRes.ok) {
-      const postsJson = await postsRes.json();
-      userPosts = (postsJson.data || []).map(normalizePost);
-    }
-  } catch {}
+  if (!author) notFound();
 
   return <ProfilePageContent author={author} userPosts={userPosts} />;
 }

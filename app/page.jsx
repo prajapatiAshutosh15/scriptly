@@ -1,59 +1,10 @@
 import Hero from "@/components/home/Hero";
 import ArticleFeed from "@/components/home/ArticleFeed";
 import Sidebar from "@/components/layout/Sidebar";
-import { normalizePost } from "@/lib/normalizers";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
-
-async function fetchPosts() {
-  try {
-    const res = await fetch(API_URL + "/posts?limit=12", {
-      cache: 'no-store',
-    });
-    if (!res.ok) return [];
-    const json = await res.json();
-    if (!json.success) return [];
-    return (json.data || []).map(normalizePost).filter(Boolean);
-  } catch {
-    return [];
-  }
-}
-
-async function fetchTags() {
-  try {
-    const res = await fetch(API_URL + "/tags", {
-      cache: 'no-store',
-    });
-    if (!res.ok) return [];
-    const json = await res.json();
-    if (!json.success) return [];
-    return json.data || [];
-  } catch {
-    return [];
-  }
-}
-
-async function fetchFeaturedPosts() {
-  try {
-    const res = await fetch(API_URL + "/posts?featured=true&limit=3", {
-      cache: 'no-store',
-    });
-    if (!res.ok) return [];
-    const json = await res.json();
-    if (!json.success) return [];
-    return (json.data || []).map(normalizePost).filter(Boolean);
-  } catch {
-    return [];
-  }
-}
-
-export default async function Home() {
-  const [posts, tags, featuredPosts] = await Promise.all([
-    fetchPosts(),
-    fetchTags(),
-    fetchFeaturedPosts(),
-  ]);
-
+export default function Home() {
+  // No server-side fetching — ArticleFeed and Sidebar fetch on client side
+  // This makes the page load instantly, even if backend is cold starting
   return (
     <>
       <Hero />
@@ -67,15 +18,14 @@ export default async function Home() {
           gridTemplateColumns: "1fr 340px",
           gap: 40,
         }} className="home-grid">
-          <ArticleFeed initialPosts={posts} />
+          <ArticleFeed />
           <div className="sidebar-desktop">
             <div style={{ position: "sticky", top: 80 }}>
-              <Sidebar tags={tags} featuredPosts={featuredPosts} />
+              <Sidebar />
             </div>
           </div>
         </div>
       </div>
-
     </>
   );
 }

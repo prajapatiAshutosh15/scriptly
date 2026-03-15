@@ -25,7 +25,8 @@ function SearchContent() {
     setLoading(true);
     try {
       const res = await api.get("/posts/search", { params: { q: searchTerm } });
-      const posts = (res.data || []).map(normalizePost).filter(Boolean);
+      const list = res.data?.posts || res.data || [];
+      const posts = (Array.isArray(list) ? list : []).map(normalizePost).filter(Boolean);
       setResults(posts);
     } catch {
       setResults([]);

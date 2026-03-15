@@ -23,7 +23,7 @@ export default function ExplorePage() {
       try {
         const res = await api.get("/tags");
         if (res.success) {
-          setTags(res.data || []);
+          setTags(Array.isArray(res.data) ? res.data : res.data?.data || []);
         }
       } catch {
         setTags([]);
@@ -39,7 +39,8 @@ export default function ExplorePage() {
       try {
         const res = await api.get("/posts?sort=popular&limit=5");
         if (res.success) {
-          setTrendingPosts((res.data || []).map(normalizePost).filter(Boolean));
+          const tPosts = res.data?.posts || res.data || [];
+          setTrendingPosts((Array.isArray(tPosts) ? tPosts : []).map(normalizePost).filter(Boolean));
         }
       } catch {
         setTrendingPosts([]);
@@ -57,7 +58,8 @@ export default function ExplorePage() {
       if (tagSlug && tagSlug !== "All") params.set("tag", tagSlug);
       const res = await api.get(`/posts?${params.toString()}`);
       if (res.success) {
-        setPosts((res.data || []).map(normalizePost).filter(Boolean));
+        const pList = res.data?.posts || res.data || [];
+        setPosts((Array.isArray(pList) ? pList : []).map(normalizePost).filter(Boolean));
       } else {
         setPosts([]);
       }

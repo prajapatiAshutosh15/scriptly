@@ -19,7 +19,8 @@ export default function BookmarksPage() {
     setLoading(true);
     try {
       const res = await api.get("/bookmarks");
-      const posts = (res.data || [])
+      const list = res.data?.posts || res.data || [];
+      const posts = (Array.isArray(list) ? list : [])
         .map((bookmark) => normalizePost(bookmark.post || bookmark))
         .filter(Boolean);
       setBookmarkedPosts(posts);
