@@ -10,15 +10,15 @@ async function fetchPost(slug) {
     if (!res.ok) return null;
     const json = await res.json();
     if (!json.success) return null;
-    return normalizePost(json.data);
+    return json.data;
   } catch {
     return null;
   }
 }
 
-async function fetchComments(slug) {
+async function fetchComments(postId) {
   try {
-    const res = await fetch(`${API_URL}/comments/post/${slug}`, { cache: 'no-store' });
+    const res = await fetch(`${API_URL}/comments/post/${postId}`, { cache: 'no-store' });
     if (!res.ok) return [];
     const json = await res.json();
     if (!json.success) return [];
@@ -31,21 +31,20 @@ async function fetchComments(slug) {
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const post = await fetchPost(slug);
-  if (!post) return {};
-  return { title: post.title, description: post.excerpt };
+  const postData = await fetchPost(slug);
+  if (!postData) return {};
+  const post = normalizePost(postData);
+  return { title: post?.title, description: post?.excerpt };
 }
 
 export default async function PostPage({ params }) {
   const { slug } = await params;
 
-  // 2 API calls only (removed /related — doesn't exist)
-  const [post, postComments] = await Promise.all([
-    fetchPost(slug),
-    fetchComments(slug),
-  ]);
+  const postData = await fetchPost(slug);
+  if (!postData) notFound();
 
-  if (!post) notFound();
+  const post = normalizePost(postData);
+  const postComments = postData?.id ? await fetchComments(postData.id) : [];
 
   return <PostPageContent post={post} postComments={postComments} relatedPosts={[]} />;
 }

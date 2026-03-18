@@ -10,7 +10,7 @@ import { useAuthStore } from "@/stores/authStore";
 const { Text, Paragraph } = Typography;
 const { TextArea } = Input;
 
-export default function CommentSection({ slug, comments: initialComments }) {
+export default function CommentSection({ postId, comments: initialComments }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [comments, setComments] = useState(initialComments);
   const [newComment, setNewComment] = useState("");
@@ -26,18 +26,18 @@ export default function CommentSection({ slug, comments: initialComments }) {
 
     setSubmitting(true);
     try {
-      const res = await api.post("/comments/post/" + slug, { content: newComment });
-      const comment = normalizeComment(res.data);
+      const res = await api.post(`/comments/post/${postId}`, { body: newComment });
+      const comment = normalizeComment(res.data?.comment || res.data);
       if (comment) {
         setComments((prev) => [comment, ...prev]);
       }
       setNewComment("");
     } catch (err) {
-      message.error(err?.error?.message || "Failed to post comment");
+      message.error(err?.message || "Failed to post comment");
     } finally {
       setSubmitting(false);
     }
-  }, [newComment, slug, isAuthenticated]);
+  }, [newComment, postId, isAuthenticated]);
 
   return (
     <div>
@@ -72,12 +72,12 @@ export default function CommentSection({ slug, comments: initialComments }) {
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         {comments.map((comment) => (
           <div key={comment.id} style={{ display: "flex", gap: 12 }}>
-            <Avatar src={comment.author.avatar} size={36}>
-              {comment.author.name[0]}
+            <Avatar src={comment.author?.avatar} size={36}>
+              {comment.author?.name?.[0]}
             </Avatar>
             <div style={{ flex: 1, minWidth: 0 }}>
               <Space size={8} align="center">
-                <Text strong style={{ fontSize: 13 }}>{comment.author.name}</Text>
+                <Text strong style={{ fontSize: 13 }}>{comment.author?.name}</Text>
                 <Text type="secondary" style={{ fontSize: 12 }}>{getRelativeTime(comment.createdAt)}</Text>
               </Space>
               <Paragraph style={{ margin: "6px 0", fontSize: 14, lineHeight: 1.7 }}>

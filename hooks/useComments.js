@@ -5,42 +5,29 @@ export function useComments() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchComments = useCallback(async (slug, params) => {
+  // type: 'post', 'question', 'answer'  |  targetId: the UUID of the target
+  const fetchComments = useCallback(async (type, targetId, params) => {
     try {
       setLoading(true);
       setError(null);
-      const res = await api.get(`/comments/post/${slug}`, { params });
+      const res = await api.get(`/comments/${type}/${targetId}`, { params });
       return res.data;
     } catch (err) {
-      setError(err.response?.data?.message || err.message);
+      setError(err?.message || 'Failed to fetch comments');
       throw err;
     } finally {
       setLoading(false);
     }
   }, []);
 
-  const createComment = useCallback(async (slug, { content, parent_id }) => {
+  const createComment = useCallback(async (type, targetId, { body, parent_id }) => {
     try {
       setLoading(true);
       setError(null);
-      const res = await api.post(`/comments/post/${slug}`, { content, parent_id });
+      const res = await api.post(`/comments/${type}/${targetId}`, { body, parent_id });
       return res.data;
     } catch (err) {
-      setError(err.response?.data?.message || err.message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const updateComment = useCallback(async (id, { content }) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const res = await api.patch(`/comments/${id}`, { content });
-      return res.data;
-    } catch (err) {
-      setError(err.response?.data?.message || err.message);
+      setError(err?.message || 'Failed to create comment');
       throw err;
     } finally {
       setLoading(false);
@@ -54,40 +41,12 @@ export function useComments() {
       const res = await api.delete(`/comments/${id}`);
       return res.data;
     } catch (err) {
-      setError(err.response?.data?.message || err.message);
+      setError(err?.message || 'Failed to delete comment');
       throw err;
     } finally {
       setLoading(false);
     }
   }, []);
 
-  const likeComment = useCallback(async (id) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const res = await api.post(`/comments/${id}/like`);
-      return res.data;
-    } catch (err) {
-      setError(err.response?.data?.message || err.message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const unlikeComment = useCallback(async (id) => {
-    try {
-      setLoading(true);
-      setError(null);
-      const res = await api.delete(`/comments/${id}/like`);
-      return res.data;
-    } catch (err) {
-      setError(err.response?.data?.message || err.message);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  return { loading, error, fetchComments, createComment, updateComment, deleteComment, likeComment, unlikeComment };
+  return { loading, error, fetchComments, createComment, deleteComment };
 }

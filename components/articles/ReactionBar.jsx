@@ -8,7 +8,7 @@ import { useAuthStore } from "@/stores/authStore";
 
 const { Text } = Typography;
 
-export default function ReactionBar({ slug, initialLikes = 0, initialIsLiked = false, initialIsBookmarked = false }) {
+export default function ReactionBar({ slug, postId, initialLikes = 0, initialIsLiked = false, initialIsBookmarked = false }) {
   const [liked, setLiked] = useState(initialIsLiked);
   const [bookmarked, setBookmarked] = useState(initialIsBookmarked);
   const [likeCount, setLikeCount] = useState(initialLikes);
@@ -16,17 +16,14 @@ export default function ReactionBar({ slug, initialLikes = 0, initialIsLiked = f
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   const handleLike = useCallback(async () => {
-    if (!isAuthenticated) {
-      router.push("/signin");
-      return;
-    }
+    if (!isAuthenticated) { router.push("/signin"); return; }
     try {
       if (liked) {
-        await api.delete('/posts/' + slug + '/like');
+        await api.delete(`/posts/${slug}/like`);
         setLiked(false);
         setLikeCount((c) => c - 1);
       } else {
-        await api.post('/posts/' + slug + '/like');
+        await api.post(`/posts/${slug}/like`);
         setLiked(true);
         setLikeCount((c) => c + 1);
       }
@@ -34,20 +31,17 @@ export default function ReactionBar({ slug, initialLikes = 0, initialIsLiked = f
   }, [liked, slug, isAuthenticated, router]);
 
   const handleBookmark = useCallback(async () => {
-    if (!isAuthenticated) {
-      router.push("/signin");
-      return;
-    }
+    if (!isAuthenticated) { router.push("/signin"); return; }
     try {
       if (bookmarked) {
-        await api.delete('/posts/' + slug + '/bookmark');
+        await api.delete(`/bookmarks/post/${postId}`);
         setBookmarked(false);
       } else {
-        await api.post('/posts/' + slug + '/bookmark');
+        await api.post(`/bookmarks/post/${postId}`);
         setBookmarked(true);
       }
     } catch {}
-  }, [bookmarked, slug, isAuthenticated, router]);
+  }, [bookmarked, postId, isAuthenticated, router]);
 
   const handleShare = useCallback(() => {
     if (typeof window !== "undefined" && navigator.clipboard) {
@@ -58,34 +52,19 @@ export default function ReactionBar({ slug, initialLikes = 0, initialIsLiked = f
   return (
     <Space orientation="vertical" align="center" size={8} style={{ width: "100%" }}>
       <Tooltip title="Like">
-        <Button
-          type="text"
-          shape="circle"
-          size="large"
+        <Button type="text" shape="circle" size="large"
           icon={liked ? <HeartFilled style={{ color: "#ef4444" }} /> : <HeartOutlined />}
-          onClick={handleLike}
-        />
+          onClick={handleLike} />
       </Tooltip>
       <Text type="secondary" style={{ fontSize: 12 }}>{likeCount}</Text>
-
       <Tooltip title="Bookmark">
-        <Button
-          type="text"
-          shape="circle"
-          size="large"
+        <Button type="text" shape="circle" size="large"
           icon={bookmarked ? <BookFilled style={{ color: "#2563eb" }} /> : <BookOutlined />}
-          onClick={handleBookmark}
-        />
+          onClick={handleBookmark} />
       </Tooltip>
-
       <Tooltip title="Share link">
-        <Button
-          type="text"
-          shape="circle"
-          size="large"
-          icon={<ShareAltOutlined />}
-          onClick={handleShare}
-        />
+        <Button type="text" shape="circle" size="large"
+          icon={<ShareAltOutlined />} onClick={handleShare} />
       </Tooltip>
     </Space>
   );

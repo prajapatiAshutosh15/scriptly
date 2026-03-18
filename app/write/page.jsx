@@ -35,7 +35,7 @@ export default function WritePage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      api.get("/tags").then((res) => setTags(res.data || [])).catch(() => setTags([]));
+      api.get("/tags").then((res) => setTags(res.data?.tags || res.data || [])).catch(() => setTags([]));
     }
   }, [isAuthenticated]);
 
@@ -199,7 +199,7 @@ export default function WritePage() {
       {/* Rich Text Editor */}
       <div style={{ maxWidth: 800, margin: "0 auto", padding: "16px 24px 48px" }}>
         <Suspense fallback={<Skeleton active paragraph={{ rows: 10 }} />}>
-          <RichTextEditor content={content} onChange={setContent} />
+          <RichTextEditor content={content} onChange={setContent} sticky />
         </Suspense>
       </div>
 

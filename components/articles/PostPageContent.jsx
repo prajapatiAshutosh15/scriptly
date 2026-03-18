@@ -85,6 +85,7 @@ export default function PostPageContent({ post, postComments, relatedPosts }) {
           <div style={{ position: "sticky", top: 80 }}>
             <ReactionBar
               slug={post.slug}
+              postId={post.id}
               initialLikes={post.likes}
               initialIsLiked={post.isLiked}
               initialIsBookmarked={post.isBookmarked}
@@ -159,6 +160,7 @@ export default function PostPageContent({ post, postComments, relatedPosts }) {
           <div className="reaction-mobile" style={{ display: "none", margin: "32px 0" }}>
             <ReactionBar
               slug={post.slug}
+              postId={post.id}
               initialLikes={post.likes}
               initialIsLiked={post.isLiked}
               initialIsBookmarked={post.isBookmarked}
@@ -166,7 +168,7 @@ export default function PostPageContent({ post, postComments, relatedPosts }) {
           </div>
 
           <Divider />
-          <CommentSection slug={post.slug} comments={postComments} />
+          <CommentSection postId={post.id} comments={postComments} />
         </div>
 
         {/* TOC - Desktop */}
