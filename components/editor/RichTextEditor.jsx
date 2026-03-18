@@ -31,6 +31,9 @@ const turndown = new TurndownService({
 
 export default function RichTextEditor({ content, onChange, placeholder, minHeight, sticky = false }) {
   const hasLoadedContent = useRef(false);
+  const debounceTimer = useRef(null);
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -45,9 +48,13 @@ export default function RichTextEditor({ content, onChange, placeholder, minHeig
     ],
     content: content || "",
     onUpdate: ({ editor }) => {
-      const html = editor.getHTML();
-      const markdown = turndown.turndown(html);
-      onChange(markdown);
+      // Debounce the expensive HTML→Markdown conversion
+      if (debounceTimer.current) clearTimeout(debounceTimer.current);
+      debounceTimer.current = setTimeout(() => {
+        const html = editor.getHTML();
+        const markdown = turndown.turndown(html);
+        onChangeRef.current(markdown);
+      }, 300);
     },
     editorProps: {
       attributes: {
@@ -55,6 +62,10 @@ export default function RichTextEditor({ content, onChange, placeholder, minHeig
       },
     },
   });
+
+  useEffect(() => {
+    return () => { if (debounceTimer.current) clearTimeout(debounceTimer.current); };
+  }, []);
 
   useEffect(() => {
     if (editor && content && !hasLoadedContent.current) {
