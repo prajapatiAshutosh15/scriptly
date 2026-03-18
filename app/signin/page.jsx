@@ -1,7 +1,7 @@
 "use client";
-import { useState, useCallback, useEffect } from "react";
-import { Typography, Card, Input, Button, Divider, Space, message } from "antd";
-import { MailOutlined, LockOutlined, UserOutlined, GithubOutlined, GoogleOutlined, TwitterOutlined } from "@ant-design/icons";
+import { useState, useEffect } from "react";
+import { Typography, Card, Input, Button, Divider, Space, App } from "antd";
+import { MailOutlined, LockOutlined, UserOutlined, GithubOutlined, GoogleOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
@@ -11,19 +11,15 @@ const { Title, Text } = Typography;
 
 export default function SignInPage() {
   const router = useRouter();
+  const { message } = App.useApp();
   const { isAuthenticated, login, register } = useAuth();
   const [isRegisterMode, setIsRegisterMode] = useState(false);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ name: "", username: "", email: "", password: "" });
 
-  // Redirect if already authenticated
   useEffect(() => {
-    if (isAuthenticated) {
-      router.push("/");
-    }
+    if (isAuthenticated) router.push("/");
   }, [isAuthenticated, router]);
-
-  if (isAuthenticated) return null;
 
   const handleChange = (field) => (e) => {
     setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -48,10 +44,12 @@ export default function SignInPage() {
     }
   };
 
-  const toggleMode = useCallback(() => {
+  const toggleMode = () => {
     setIsRegisterMode((prev) => !prev);
     setForm({ name: "", username: "", email: "", password: "" });
-  }, []);
+  };
+
+  if (isAuthenticated) return null;
 
   return (
     <div style={{

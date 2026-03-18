@@ -1,12 +1,13 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Button, Input, Space, Drawer, Avatar, Dropdown, message } from "antd";
-import { SearchOutlined, MenuOutlined, EditOutlined, UserOutlined, LogoutOutlined, BookOutlined } from "@ant-design/icons";
+import { SearchOutlined, MenuOutlined, EditOutlined, UserOutlined, LogoutOutlined, BookOutlined, SettingOutlined, TrophyOutlined } from "@ant-design/icons";
 import { SITE_NAME, NAV_LINKS } from "@/lib/constants";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import Logo from "@/components/brand/Logo";
+import NotificationBell from "./NotificationBell";
 import { useAuthStore } from "@/stores/authStore";
 
 export default function Navbar() {
@@ -20,20 +21,22 @@ export default function Navbar() {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
 
-  const handleSearch = useCallback((value) => {
+  const handleSearch = (value) => {
     if (value.trim()) router.push(`/search?q=${encodeURIComponent(value.trim())}`);
-  }, [router]);
+  };
 
-  const handleLogout = useCallback(() => {
+  const handleLogout = () => {
     logout();
     message.success("Signed out");
     router.push("/");
-  }, [logout, router]);
+  };
 
   const userMenuItems = [
     { key: "profile", icon: <UserOutlined />, label: <Link href={`/user/${user?.username}`}>My Profile</Link> },
     { key: "bookmarks", icon: <BookOutlined />, label: <Link href="/bookmarks">Bookmarks</Link> },
     { key: "drafts", icon: <EditOutlined />, label: <Link href="/write">My Drafts</Link> },
+    { key: "leaderboard", icon: <TrophyOutlined />, label: <Link href="/leaderboard">Leaderboard</Link> },
+    { key: "settings", icon: <SettingOutlined />, label: <Link href="/settings">Settings</Link> },
     { type: "divider" },
     { key: "logout", icon: <LogoutOutlined />, label: "Sign Out", danger: true, onClick: handleLogout },
   ];
@@ -101,6 +104,7 @@ export default function Navbar() {
           {/* Actions */}
           <Space size={8}>
             <ThemeToggle />
+            <NotificationBell />
             <Link href="/write" className="hidden-mobile">
               <Button type="primary" icon={<EditOutlined />} shape="round">Write</Button>
             </Link>

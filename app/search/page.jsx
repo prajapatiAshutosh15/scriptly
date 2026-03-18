@@ -1,133 +1,140 @@
 "use client";
-import { useState, useCallback, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Input, Segmented, Typography, Empty, Spin } from "antd";
+import { Input, Segmented, Typography, Card, Avatar, Tag, Skeleton } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
-import api from "@/services/api";
-import { normalizePost } from "@/lib/normalizers";
+import Link from "next/link";
+import { useSearch } from "@/hooks/useSearch";
 import ArticleCard from "@/components/articles/ArticleCard";
+import QuestionCard from "@/components/questions/QuestionCard";
+import EmptyState from "@/components/shared/EmptyState";
+import { normalizePost, normalizeQuestion } from "@/lib/normalizers";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 function SearchContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const query = searchParams.get("q") || "";
-  const [sortBy, setSortBy] = useState("Relevant");
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const fetchResults = useCallback(async (searchTerm) => {
-    if (!searchTerm.trim()) {
-      setResults([]);
-      return;
-    }
-    setLoading(true);
-    try {
-      const res = await api.get("/posts/search", { params: { q: searchTerm } });
-      const list = res.data?.posts || res.data || [];
-      const posts = (Array.isArray(list) ? list : []).map(normalizePost).filter(Boolean);
-      setResults(posts);
-    } catch {
-      setResults([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const { loading, search } = useSearch();
+  const [results, setResults] = useState({});
+  const [activeType, setActiveType] = useState("");
 
   useEffect(() => {
-    if (query) {
-      fetchResults(query);
+    if (query.length >= 2) {
+      search(query, { type: activeType || undefined }).then((data) => setResults(data || {}));
     } else {
-      setResults([]);
+      setResults({});
     }
-  }, [query, fetchResults]);
+  }, [query, activeType]);
 
-  const sorted = [...results].sort((a, b) => {
-    if (sortBy === "Latest") return new Date(b.publishedAt) - new Date(a.publishedAt);
-    if (sortBy === "Popular") return b.likes - a.likes;
-    return 0;
-  });
-
-  const handleSearch = useCallback((value) => {
+  const handleSearch = (value) => {
     if (value.trim()) router.push(`/search?q=${encodeURIComponent(value.trim())}`);
-  }, [router]);
+  };
+
+  const types = [
+    { label: "All", value: "" },
+    { label: "Posts", value: "post" },
+    { label: "Questions", value: "question" },
+    { label: "Discussions", value: "discussion" },
+    { label: "Users", value: "user" },
+  ];
+
+  const posts = results.posts || [];
+  const questions = results.questions || [];
+  const discussions = results.discussions || [];
+  const users = results.users || [];
+  const totalResults = posts.length + questions.length + discussions.length + users.length;
 
   return (
-    <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
-      {/* Search Bar */}
+    <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 24px" }}>
       <div style={{ maxWidth: 560, margin: "0 auto 40px" }}>
-        <Input.Search
-          placeholder="Search posts, tags, authors..."
-          defaultValue={query}
-          onSearch={handleSearch}
-          size="large"
-          enterButton
-          style={{ borderRadius: 24 }}
-          prefix={<SearchOutlined />}
-        />
+        <Input.Search placeholder="Search posts, questions, discussions, users..." defaultValue={query}
+          onSearch={handleSearch} size="large" enterButton style={{ borderRadius: 24 }} prefix={<SearchOutlined />} />
       </div>
 
       {query && (
         <>
-          <div style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginBottom: 24,
-            flexWrap: "wrap",
-            gap: 12,
-          }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
             <Text type="secondary">
-              {loading ? "Searching..." : (
-                <>{sorted.length} result{sorted.length !== 1 ? "s" : ""} for &ldquo;<Text strong>{query}</Text>&rdquo;</>
-              )}
+              {loading ? "Searching..." : <>{totalResults} result{totalResults !== 1 ? "s" : ""} for &ldquo;<Text strong>{query}</Text>&rdquo;</>}
             </Text>
-            <Segmented
-              options={["Relevant", "Latest", "Popular"]}
-              value={sortBy}
-              onChange={setSortBy}
-            />
+            <Segmented options={types} value={activeType} onChange={setActiveType} />
           </div>
 
-          {loading ? (
-            <div style={{ textAlign: "center", padding: "64px 0" }}>
-              <Spin size="large" />
-            </div>
-          ) : sorted.length > 0 ? (
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-              gap: 24,
-            }}>
-              {sorted.map((post) => (
-                <ArticleCard key={post.id} post={post} />
-              ))}
-            </div>
+          {loading ? <Skeleton active paragraph={{ rows: 8 }} /> : totalResults === 0 ? (
+            <EmptyState icon="🔍" title="No results found" description="Try different keywords" />
           ) : (
-            <Empty description="No articles found" style={{ padding: "64px 0" }} />
+            <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+              {/* Posts */}
+              {posts.length > 0 && (!activeType || activeType === "post") && (
+                <div>
+                  <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, color: "var(--text-primary)" }}>Posts ({posts.length})</h3>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 16 }}>
+                    {posts.map((p) => <ArticleCard key={p.id} post={normalizePost(p)} />)}
+                  </div>
+                </div>
+              )}
+
+              {/* Questions */}
+              {questions.length > 0 && (!activeType || activeType === "question") && (
+                <div>
+                  <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, color: "var(--text-primary)" }}>Questions ({questions.length})</h3>
+                  <div style={{ background: "var(--nav-bg)", borderRadius: 16, border: "1px solid var(--border-color)", overflow: "hidden" }}>
+                    {questions.map((q) => <QuestionCard key={q.id} question={normalizeQuestion(q)} />)}
+                  </div>
+                </div>
+              )}
+
+              {/* Discussions */}
+              {discussions.length > 0 && (!activeType || activeType === "discussion") && (
+                <div>
+                  <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, color: "var(--text-primary)" }}>Discussions ({discussions.length})</h3>
+                  {discussions.map((d) => (
+                    <Link key={d.id} href={`/discussions/${d.slug}`} style={{ textDecoration: "none" }}>
+                      <Card hoverable style={{ borderRadius: 16, marginBottom: 8 }}>
+                        <div style={{ fontWeight: 600, fontSize: 15, color: "var(--text-primary)" }}>{d.title}</div>
+                        <div style={{ fontSize: 12, color: "var(--text-secondary)", marginTop: 4 }}>{d.replies_count || 0} replies · by @{d.author_username}</div>
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {/* Users */}
+              {users.length > 0 && (!activeType || activeType === "user") && (
+                <div>
+                  <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, color: "var(--text-primary)" }}>Users ({users.length})</h3>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: 12 }}>
+                    {users.map((u) => (
+                      <Link key={u.id} href={`/user/${u.username}`} style={{ textDecoration: "none" }}>
+                        <Card hoverable style={{ borderRadius: 16 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                            <Avatar src={u.avatar} size={40} style={{ background: "#2563eb" }}>{u.name?.[0]}</Avatar>
+                            <div>
+                              <div style={{ fontWeight: 600, color: "var(--text-primary)" }}>{u.name}</div>
+                              <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>@{u.username} · {u.reputation || 0} rep</div>
+                            </div>
+                          </div>
+                        </Card>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           )}
         </>
       )}
 
-      {!query && (
-        <Empty
-          description={
-            <div>
-              <Title level={4} style={{ margin: "8px 0" }}>Search for articles</Title>
-              <Text type="secondary">Find posts by title, topic, tag, or author</Text>
-            </div>
-          }
-          style={{ padding: "64px 0" }}
-        />
-      )}
+      {!query && <EmptyState icon="🔍" title="Search for anything" description="Find posts, questions, discussions, and users" />}
     </div>
   );
 }
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={<div style={{ textAlign: "center", padding: 80 }}>Loading...</div>}>
+    <Suspense fallback={<div style={{ textAlign: "center", padding: 80 }}><Skeleton active paragraph={{ rows: 6 }} /></div>}>
       <SearchContent />
     </Suspense>
   );
