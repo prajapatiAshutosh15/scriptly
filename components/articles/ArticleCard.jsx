@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback } from "react";
 import Link from "next/link";
-import { Card, Tag, Avatar, Space, Typography, message, Tooltip } from "antd";
+import { Card, Avatar, Space, Typography, message, Tooltip } from "antd";
 import { HeartOutlined, HeartFilled, MessageOutlined, ClockCircleOutlined, BookOutlined, BookFilled } from "@ant-design/icons";
 import { getRelativeTime, getDefaultCover } from "@/lib/utils";
 import { useAuthStore } from "@/stores/authStore";
@@ -56,7 +56,7 @@ const ArticleCard = ({ post, featured = false }) => {
       hoverable
       cover={
         <Link href={`/post/${post.slug}`}>
-          <div style={{ overflow: "hidden", height: featured ? 220 : 190 }}>
+          <div style={{ overflow: "hidden", height: featured ? 220 : 190, position: "relative" }}>
             <img
               src={post.coverImage || getDefaultCover(post.slug || post.id)}
               alt={post.title}
@@ -70,20 +70,40 @@ const ArticleCard = ({ post, featured = false }) => {
               onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
               onError={(e) => { e.currentTarget.src = getDefaultCover(); }}
             />
+            <div style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: 60,
+              background: "linear-gradient(to top, rgba(0,0,0,0.25), transparent)",
+              pointerEvents: "none",
+            }} />
           </div>
         </Link>
       }
       styles={{ body: { padding: 20 } }}
-      style={{ borderRadius: 16, overflow: "hidden" }}
+      className="card-hover"
+      style={{ borderRadius: 16, overflow: "hidden", border: "1px solid var(--border-color)", background: "var(--card-bg, transparent)" }}
     >
       {/* Tags */}
       {post.tags && post.tags.length > 0 && (
         <Space size={4} wrap style={{ marginBottom: 12 }}>
           {post.tags.slice(0, 3).map((tag) => (
             <Link key={tag.id || tag.slug || tag} href={`/explore?tag=${tag.slug || tag}`}>
-              <Tag color="blue" style={{ borderRadius: 12, margin: 0, cursor: "pointer" }}>
+              <span style={{
+                background: "rgba(37,99,235,0.1)",
+                color: "#2563eb",
+                borderRadius: 20,
+                padding: "2px 10px",
+                fontSize: 12,
+                fontWeight: 500,
+                cursor: "pointer",
+                display: "inline-block",
+                transition: "background 0.2s",
+              }}>
                 {tag.name || tag}
-              </Tag>
+              </span>
             </Link>
           ))}
         </Space>
@@ -93,7 +113,8 @@ const ArticleCard = ({ post, featured = false }) => {
       <Link href={`/post/${post.slug}`} style={{ textDecoration: "none" }}>
         <Paragraph
           strong
-          style={{ fontSize: featured ? 18 : 16, lineHeight: 1.4, marginBottom: 8, color: "var(--text-primary)" }}
+          className="article-card-title"
+          style={{ fontSize: featured ? 18 : 16, fontWeight: 700, lineHeight: 1.4, marginBottom: 8, color: "var(--text-primary)", transition: "color 0.2s" }}
           ellipsis={{ rows: 2 }}
         >
           {post.title}
@@ -101,7 +122,7 @@ const ArticleCard = ({ post, featured = false }) => {
       </Link>
 
       {/* Excerpt */}
-      <Paragraph type="secondary" style={{ fontSize: 13, lineHeight: 1.6, marginBottom: 16 }} ellipsis={{ rows: 2 }}>
+      <Paragraph style={{ fontSize: 13, lineHeight: 1.5, marginBottom: 16, color: "var(--text-secondary)" }} ellipsis={{ rows: 2 }}>
         {post.excerpt}
       </Paragraph>
 

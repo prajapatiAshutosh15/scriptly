@@ -30,7 +30,14 @@ export default function AskQuestionPage() {
     if (!body.trim() || body.length < 20) { message.warning("Body must be at least 20 characters"); return; }
     setSubmitting(true);
     try {
-      const data = await createQuestion({ title, body, tags: selectedTags });
+      const existingTagIds = [];
+      const customTagNames = [];
+      selectedTags.forEach((name) => {
+        const found = tags.find((t) => t.name.toLowerCase() === name.toLowerCase());
+        if (found) existingTagIds.push(found.id);
+        else customTagNames.push(name);
+      });
+      const data = await createQuestion({ title, body, tags: existingTagIds, custom_tags: customTagNames });
       message.success("Question posted!");
       router.push(`/questions/${data.question?.slug || ""}`);
     } catch (err) {
@@ -53,9 +60,10 @@ export default function AskQuestionPage() {
           </div>
         </Suspense>
         <label style={{ fontWeight: 600, fontSize: 14, marginBottom: 8, display: "block", color: "var(--text-primary)" }}>Tags (up to 5)</label>
-        <Select mode="multiple" placeholder="Select tags" maxCount={5} style={{ width: "100%" }}
+        <Select mode="tags" placeholder="Type to add tags (up to 5)" maxCount={5} style={{ width: "100%" }}
+          tokenSeparators={[","]}
           value={selectedTags} onChange={setSelectedTags}
-          options={tags.map((t) => ({ label: t.name, value: t.id }))} />
+          options={tags.map((t) => ({ label: t.name, value: t.name }))} />
       </Card>
       <Space>
         <Button type="primary" shape="round" size="large" onClick={handleSubmit} loading={submitting}>Post Question</Button>

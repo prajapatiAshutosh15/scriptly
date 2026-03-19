@@ -1,122 +1,224 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Card, Tag, Avatar, Typography, Button, Space, Skeleton } from "antd";
-import { FireOutlined, StarOutlined, TeamOutlined } from "@ant-design/icons";
+import { Button, Skeleton } from "antd";
+import { FireOutlined } from "@ant-design/icons";
 import api from "@/services/api";
-import { normalizePost } from "@/lib/normalizers";
-
-const { Text, Paragraph } = Typography;
+import { MOCK_TAGS, MOCK_FEATURED, USE_MOCK } from "@/lib/mockData";
 
 export default function Sidebar() {
   const [tags, setTags] = useState([]);
-  const [featuredPosts, setFeaturedPosts] = useState([]);
+  const [trending, setTrending] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
+      if (USE_MOCK) { setTags(MOCK_TAGS); setTrending(MOCK_FEATURED); setLoading(false); return; }
       try {
         const [tagsRes, postsRes] = await Promise.all([
           api.get("/tags").catch(() => ({ success: false })),
-          api.get("/posts?sort=popular&limit=3").catch(() => ({ success: false })),
+          api.get("/posts?sort=popular&limit=5").catch(() => ({ success: false })),
         ]);
 
         if (tagsRes.success) {
-          const tagList = Array.isArray(tagsRes.data) ? tagsRes.data : tagsRes.data?.data || [];
-          setTags(tagList);
+          const tagList = Array.isArray(tagsRes.data)
+            ? tagsRes.data
+            : tagsRes.data?.tags || tagsRes.data?.data || [];
+          setTags(tagList.length > 0 ? tagList : MOCK_TAGS);
+        } else {
+          setTags(MOCK_TAGS);
         }
+
         if (postsRes.success) {
           const postList = postsRes.data?.posts || postsRes.data || [];
-          setFeaturedPosts((Array.isArray(postList) ? postList : []).map(normalizePost).filter(Boolean));
+          const list = Array.isArray(postList) ? postList : [];
+          setTrending(
+            list.length > 0
+              ? list.slice(0, 5).map((p) => ({
+                  id: p.id || p._id,
+                  title: p.title,
+                  likes: p.likes || p.likes_count || p.likesCount || 0,
+                }))
+              : MOCK_FEATURED
+          );
+        } else {
+          setTrending(MOCK_FEATURED);
         }
-      } catch {}
+      } catch {
+        setTags(MOCK_TAGS);
+        setTrending(MOCK_FEATURED);
+      }
       setLoading(false);
     }
     loadData();
   }, []);
 
-  const trendingTags = tags.slice(0, 10);
+  const suggestedTags = tags.slice(0, 6);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      {/* Trending Tags */}
-      <Card
-        title={<Space><FireOutlined style={{ color: "#2563eb" }} /><span>Trending Tags</span></Space>}
-        size="small"
-        style={{ borderRadius: 16 }}
+      {/* Trending Topics */}
+      <div
+        style={{
+          background: "var(--card-bg)",
+          border: "1px solid var(--border-color)",
+          borderRadius: 12,
+          padding: 20,
+        }}
       >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            marginBottom: 16,
+          }}
+        >
+          <FireOutlined style={{ color: "#e5873a", fontSize: 16 }} />
+          <span
+            style={{
+              fontWeight: 700,
+              fontSize: 16,
+              color: "var(--text-primary)",
+            }}
+          >
+            Trending Topics
+          </span>
+        </div>
+
         {loading ? (
-          <Skeleton active paragraph={{ rows: 2 }} title={false} />
+          <Skeleton active paragraph={{ rows: 4 }} title={false} />
         ) : (
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {trendingTags.length > 0 ? (
-              trendingTags.map((tag) => (
-                <Link key={tag.slug || tag.id} href={`/explore?tag=${tag.slug}`}>
-                  <Tag color={tag.color} style={{ borderRadius: 12, cursor: "pointer", margin: 0, padding: "2px 10px" }}>
-                    #{tag.name}
-                  </Tag>
-                </Link>
-              ))
-            ) : (
-              <Text type="secondary" style={{ fontSize: 13 }}>No tags available</Text>
-            )}
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: 16 }}
+          >
+            {trending.map((item, index) => (
+              <div
+                key={item.id}
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 12,
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: 24,
+                    fontWeight: 800,
+                    color: "var(--text-secondary)",
+                    opacity: 0.3,
+                    lineHeight: 1,
+                    minWidth: 32,
+                    fontFamily: "monospace",
+                  }}
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div
+                    style={{
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: "var(--text-primary)",
+                      lineHeight: 1.4,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {item.title}
+                  </div>
+                  <div
+                    style={{
+                      fontSize: 12,
+                      color: "var(--text-secondary)",
+                      marginTop: 2,
+                    }}
+                  >
+                    {item.likes} likes
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
-      </Card>
+      </div>
 
-      {/* Featured Posts */}
-      <Card
-        title={<Space><StarOutlined style={{ color: "#2563eb" }} /><span>Featured Posts</span></Space>}
-        size="small"
-        style={{ borderRadius: 16 }}
+      {/* Suggested Tags */}
+      <div
+        style={{
+          background: "var(--card-bg)",
+          border: "1px solid var(--border-color)",
+          borderRadius: 12,
+          padding: 20,
+        }}
       >
+        <span
+          style={{
+            fontWeight: 700,
+            fontSize: 16,
+            color: "var(--text-primary)",
+            display: "block",
+            marginBottom: 16,
+          }}
+        >
+          Suggested Tags
+        </span>
+
         {loading ? (
           <Skeleton active paragraph={{ rows: 3 }} title={false} />
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {featuredPosts.length > 0 ? (
-              featuredPosts.map((post) => (
-                <Link
-                  key={post.id}
-                  href={`/post/${post.slug}`}
-                  style={{ display: "flex", alignItems: "flex-start", gap: 12, textDecoration: "none" }}
-                >
-                  <Avatar src={post.author?.avatar} size={36} style={{ background: "#2563eb" }}>
-                    {post.author?.name?.[0] || "U"}
-                  </Avatar>
-                  <div style={{ minWidth: 0, flex: 1 }}>
-                    <Text strong style={{ fontSize: 13, lineHeight: 1.4, display: "block" }}>{post.title}</Text>
-                    <Text type="secondary" style={{ fontSize: 12, marginTop: 2 }}>{post.author?.name}</Text>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: 12 }}
+          >
+            {suggestedTags.map((tag) => (
+              <div
+                key={tag.slug || tag.id}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div>
+                  <Link
+                    href={`/explore?tag=${tag.slug}`}
+                    style={{
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: "var(--text-primary)",
+                      textDecoration: "none",
+                    }}
+                  >
+                    #{tag.name}
+                  </Link>
+                  <div
+                    style={{
+                      fontSize: 12,
+                      color: "var(--text-secondary)",
+                      marginTop: 1,
+                    }}
+                  >
+                    {tag.postCount || tag.post_count || 0} posts
                   </div>
-                </Link>
-              ))
-            ) : (
-              <Text type="secondary" style={{ fontSize: 13 }}>No featured posts yet</Text>
-            )}
+                </div>
+                <Button
+                  size="small"
+                  shape="round"
+                  style={{
+                    borderColor: "#e5873a",
+                    color: "#e5873a",
+                    fontSize: 12,
+                    height: 28,
+                  }}
+                >
+                  Follow
+                </Button>
+              </div>
+            ))}
           </div>
         )}
-      </Card>
-
-      {/* Community Card */}
-      <Card
-        style={{ borderRadius: 16, background: "linear-gradient(135deg, #2563eb 0%, #6366f1 100%)", border: "none" }}
-        styles={{ body: { padding: 24 } }}
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <Space>
-            <TeamOutlined style={{ color: "#fff", fontSize: 18 }} />
-            <Text strong style={{ color: "#fff", fontSize: 16 }}>Join the Community</Text>
-          </Space>
-          <Paragraph style={{ color: "rgba(219,234,254,0.85)", margin: 0, fontSize: 13 }}>
-            Connect with 50,000+ developers sharing ideas and building together.
-          </Paragraph>
-          <Link href="/signin">
-            <Button block size="large" style={{ marginTop: 4, background: "#fff", color: "#2563eb", border: "none", fontWeight: 600, borderRadius: 20 }}>
-              Get Started — It&apos;s Free
-            </Button>
-          </Link>
-        </div>
-      </Card>
+      </div>
     </div>
   );
 }

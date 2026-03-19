@@ -9,26 +9,33 @@ export default function AntdConfigProvider({ children }) {
 
   useEffect(() => setMounted(true), []);
 
-  const isDark = mounted ? resolvedTheme === "dark" : false;
+  const isDark = mounted ? resolvedTheme === "dark" : true;
 
   const themeConfig = useMemo(() => ({
     algorithm: isDark ? antdTheme.darkAlgorithm : antdTheme.defaultAlgorithm,
     cssVar: true,
     token: {
-      colorPrimary: "#2563eb",
+      colorPrimary: "#e5873a",
       borderRadius: 8,
-      fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
-      colorBgContainer: isDark ? "#1e293b" : "#ffffff",
-      colorBgElevated: isDark ? "#1e293b" : "#ffffff",
-      colorBgLayout: isDark ? "#0f172a" : "#f8fafc",
-      colorText: isDark ? "#f1f5f9" : "#0f172a",
-      colorTextSecondary: isDark ? "#94a3b8" : "#64748b",
-      colorBorder: isDark ? "#334155" : "#e2e8f0",
-      colorBorderSecondary: isDark ? "#1e293b" : "#f1f5f9",
+      fontFamily: "'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      colorBgContainer: isDark ? "#1a1a1a" : "#ffffff",
+      colorBgElevated: isDark ? "#242424" : "#ffffff",
+      colorBgLayout: isDark ? "#0f0f0f" : "#f5f5f5",
+      colorText: isDark ? "#e8e8e8" : "#1a1a1a",
+      colorTextSecondary: isDark ? "#888888" : "#666666",
+      colorBorder: isDark ? "#2a2a2a" : "#e0e0e0",
+      colorBorderSecondary: isDark ? "#1a1a1a" : "#f5f5f5",
     },
     components: {
       Card: { paddingLG: 20 },
-      Button: { borderRadius: 20 },
+      Button: {
+        borderRadius: 8,
+        primaryColor: isDark ? "#0f0f0f" : "#ffffff",
+        colorPrimaryBg: "#e5873a",
+        defaultBg: isDark ? "#1a1a1a" : "#f5f5f5",
+        defaultColor: isDark ? "#e8e8e8" : "#1a1a1a",
+        defaultBorderColor: isDark ? "#2a2a2a" : "#e0e0e0",
+      },
       Tag: { borderRadiusSM: 12 },
     },
   }), [isDark]);

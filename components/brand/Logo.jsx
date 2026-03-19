@@ -11,24 +11,18 @@ export default function Logo({ size = 36, showText = true, textSize = 20 }) {
         xmlns="http://www.w3.org/2000/svg"
         style={{ flexShrink: 0 }}
       >
-        {/* Background rounded square */}
         <defs>
           <linearGradient id="logoGrad" x1="0" y1="0" x2="48" y2="48">
-            <stop offset="0%" stopColor="#6366f1" />
-            <stop offset="50%" stopColor="#2563eb" />
-            <stop offset="100%" stopColor="#0ea5e9" />
-          </linearGradient>
-          <linearGradient id="codeGrad" x1="12" y1="12" x2="36" y2="36">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-            <stop offset="100%" stopColor="#e0e7ff" stopOpacity="0.9" />
+            <stop offset="0%" stopColor="#e5873a" />
+            <stop offset="100%" stopColor="#d4713a" />
           </linearGradient>
         </defs>
-        <rect x="0" y="0" width="48" height="48" rx="14" fill="url(#logoGrad)" />
+        <rect x="0" y="0" width="48" height="48" rx="12" fill="url(#logoGrad)" />
 
         {/* Left bracket < */}
         <path
           d="M18 16L10 24L18 32"
-          stroke="url(#codeGrad)"
+          stroke="#ffffff"
           strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -38,17 +32,17 @@ export default function Logo({ size = 36, showText = true, textSize = 20 }) {
         {/* Right bracket > */}
         <path
           d="M30 16L38 24L30 32"
-          stroke="url(#codeGrad)"
+          stroke="#ffffff"
           strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"
           fill="none"
         />
 
-        {/* Center slash / (represents script) */}
+        {/* Center slash / */}
         <path
           d="M27 13L21 35"
-          stroke="url(#codeGrad)"
+          stroke="rgba(255,255,255,0.7)"
           strokeWidth="2.5"
           strokeLinecap="round"
           fill="none"
@@ -57,18 +51,14 @@ export default function Logo({ size = 36, showText = true, textSize = 20 }) {
 
       {showText && (
         <span style={{
-          fontWeight: 800,
+          fontFamily: "'JetBrains Mono', monospace",
+          fontWeight: 700,
           fontSize: textSize,
-          color: "var(--text-primary)",
+          color: "#e8e8e8",
           letterSpacing: "-0.02em",
           lineHeight: 1,
         }}>
-          Script<span style={{
-            background: "linear-gradient(135deg, #6366f1, #2563eb, #0ea5e9)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-          }}>ly</span>
+          script<span style={{ color: "#e5873a" }}>ly</span>
         </span>
       )}
     </div>

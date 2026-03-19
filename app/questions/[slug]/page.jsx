@@ -14,6 +14,7 @@ import { useVotes } from "@/hooks/useVotes";
 import { useAuthStore } from "@/stores/authStore";
 import { normalizeQuestion, normalizeAnswer } from "@/lib/normalizers";
 import { formatRelativeTime } from "@/lib/utils";
+import { USE_MOCK, MOCK_QUESTION_DETAILS } from "@/lib/mockData";
 
 export default function QuestionDetailPage() {
   const { slug } = useParams();
@@ -32,6 +33,15 @@ export default function QuestionDetailPage() {
 
   const loadQuestion = async () => {
     setLoading(true);
+    if (USE_MOCK) {
+      const mockQ = MOCK_QUESTION_DETAILS[slug] || Object.values(MOCK_QUESTION_DETAILS)[0];
+      if (mockQ) {
+        setQuestion(normalizeQuestion(mockQ));
+        setAnswers((mockQ.answers || []).map(normalizeAnswer));
+      }
+      setLoading(false);
+      return;
+    }
     try {
       const data = await fetchBySlug(slug);
       const q = data.question;

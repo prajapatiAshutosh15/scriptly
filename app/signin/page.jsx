@@ -58,7 +58,7 @@ export default function SignInPage() {
       alignItems: "center",
       justifyContent: "center",
       padding: 24,
-      background: "linear-gradient(135deg, rgba(37,99,235,0.04) 0%, rgba(99,102,241,0.03) 100%)",
+      background: "linear-gradient(135deg, rgba(37,99,235,0.04) 0%, rgba(229,135,58,0.03) 100%)",
     }}>
       <Card style={{ maxWidth: 440, width: "100%", borderRadius: 24, padding: 8 }}>
         <div style={{ textAlign: "center", marginBottom: 32 }}>

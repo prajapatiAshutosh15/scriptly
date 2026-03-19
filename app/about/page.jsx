@@ -26,7 +26,7 @@ export default function AboutPage() {
     <div>
       {/* Hero */}
       <div style={{
-        background: "linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(99,102,241,0.05) 100%)",
+        background: "linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(229,135,58,0.05) 100%)",
         padding: "80px 24px",
         textAlign: "center",
       }}>
@@ -47,7 +47,7 @@ export default function AboutPage() {
               Scriptly was founded in 2024 with a simple mission: give every developer a voice. We believe that writing makes you a better thinker, and sharing makes the entire community stronger.
             </Paragraph>
             <Paragraph style={{ fontSize: 16, lineHeight: 1.8 }}>
-              Today, over 50,000 developers use Scriptly to publish articles, share tutorials, and build their personal brand. Our platform has served over 10 million readers across 180 countries.
+              Our growing community of developers uses Scriptly to publish articles, ask and answer technical questions, and build their personal brand. We're just getting started, and every new voice makes the community stronger.
             </Paragraph>
           </Col>
           <Col xs={24} md={12}>
@@ -82,16 +82,16 @@ export default function AboutPage() {
 
         <Divider style={{ margin: "60px 0" }} />
 
-        {/* Stats */}
+        {/* Platform Highlights */}
         <Row gutter={[24, 24]} style={{ textAlign: "center", marginBottom: 60 }}>
           {[
-            { value: "50K+", label: "Writers" },
-            { value: "1.2M", label: "Articles" },
-            { value: "10M+", label: "Monthly Readers" },
-            { value: "180", label: "Countries" },
+            { title: "Questions & Answers", label: "Get help from real developers" },
+            { title: "Technical Blogs", label: "Share your knowledge and tutorials" },
+            { title: "Community Driven", label: "Built by developers, for developers" },
+            { title: "Open to All", label: "Free to read, write, and participate" },
           ].map((s, i) => (
             <Col xs={12} md={6} key={i}>
-              <div style={{ fontSize: 36, fontWeight: 800, color: "#2563eb" }}>{s.value}</div>
+              <div style={{ fontSize: 18, fontWeight: 700, color: "#2563eb" }}>{s.title}</div>
               <Text type="secondary">{s.label}</Text>
             </Col>
           ))}
@@ -122,12 +122,12 @@ export default function AboutPage() {
           marginTop: 60,
           padding: 48,
           textAlign: "center",
-          background: "linear-gradient(135deg, #2563eb 0%, #6366f1 100%)",
+          background: "linear-gradient(135deg, #2563eb 0%, #e5873a 100%)",
           borderRadius: 20,
         }}>
           <Title level={3} style={{ color: "#fff", margin: 0 }}>Ready to start writing?</Title>
           <Paragraph style={{ color: "rgba(219,234,254,0.85)", marginTop: 8 }}>
-            Join 50,000+ developers sharing their knowledge on Scriptly.
+            Join a growing community of developers sharing their knowledge on Scriptly.
           </Paragraph>
           <Link href="/write">
             <button style={{

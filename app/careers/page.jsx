@@ -70,7 +70,7 @@ export default function CareersPage() {
     <div>
       {/* Hero */}
       <div style={{
-        background: "linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(99,102,241,0.05) 100%)",
+        background: "linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(229,135,58,0.05) 100%)",
         padding: "80px 24px",
         textAlign: "center",
       }}>
@@ -148,7 +148,7 @@ export default function CareersPage() {
           marginTop: 60,
           padding: 48,
           textAlign: "center",
-          background: "linear-gradient(135deg, #2563eb 0%, #6366f1 100%)",
+          background: "linear-gradient(135deg, #2563eb 0%, #e5873a 100%)",
           borderRadius: 20,
         }}>
           <Title level={3} style={{ color: "#fff", margin: 0 }}>Don&apos;t see the right role?</Title>

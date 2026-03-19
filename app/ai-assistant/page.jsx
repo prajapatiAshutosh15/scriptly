@@ -46,7 +46,7 @@ export default function AiAssistantPage() {
         )}
         {messages.map((msg, i) => (
           <div key={i} style={{ display: "flex", gap: 12, marginBottom: 20, flexDirection: msg.role === "user" ? "row-reverse" : "row" }}>
-            <Avatar size={32} style={{ background: msg.role === "user" ? "#2563eb" : "#6366f1", flexShrink: 0 }}>
+            <Avatar size={32} style={{ background: msg.role === "user" ? "#2563eb" : "#e5873a", flexShrink: 0 }}>
               {msg.role === "user" ? (user?.name?.[0] || <UserOutlined />) : <RobotOutlined />}
             </Avatar>
             <Card style={{ borderRadius: 16, maxWidth: "75%", background: msg.role === "user" ? "rgba(37,99,235,0.08)" : "var(--nav-bg)" }}>
@@ -62,7 +62,7 @@ export default function AiAssistantPage() {
             </Card>
           </div>
         ))}
-        {loading && <div style={{ display: "flex", gap: 12 }}><Avatar size={32} style={{ background: "#6366f1" }}><RobotOutlined /></Avatar><Card style={{ borderRadius: 16 }}><Skeleton active paragraph={{ rows: 2 }} /></Card></div>}
+        {loading && <div style={{ display: "flex", gap: 12 }}><Avatar size={32} style={{ background: "#e5873a" }}><RobotOutlined /></Avatar><Card style={{ borderRadius: 16 }}><Skeleton active paragraph={{ rows: 2 }} /></Card></div>}
       </div>
       <div style={{ display: "flex", gap: 12 }}>
         <Input size="large" placeholder="Ask a question..." value={input} onChange={(e) => setInput(e.target.value)} onPressEnter={handleSend} style={{ borderRadius: 24, flex: 1 }} />

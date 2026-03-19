@@ -10,6 +10,7 @@ import { useDiscussions } from "@/hooks/useDiscussions";
 import { useAuthStore } from "@/stores/authStore";
 import { normalizeDiscussion } from "@/lib/normalizers";
 import { formatRelativeTime } from "@/lib/utils";
+import { USE_MOCK, MOCK_DISCUSSION_DETAILS } from "@/lib/mockData";
 
 export default function DiscussionDetailPage() {
   const { slug } = useParams();
@@ -25,6 +26,15 @@ export default function DiscussionDetailPage() {
 
   const loadDiscussion = async () => {
     setLoading(true);
+    if (USE_MOCK) {
+      const mockD = MOCK_DISCUSSION_DETAILS[slug] || Object.values(MOCK_DISCUSSION_DETAILS)[0];
+      if (mockD) {
+        setDiscussion(normalizeDiscussion(mockD));
+        setReplies(mockD.replies || []);
+      }
+      setLoading(false);
+      return;
+    }
     try {
       const data = await fetchBySlug(slug);
       const d = data?.discussion;

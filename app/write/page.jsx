@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button, Input, Modal, Tag, Space, Typography, message, Upload, Skeleton } from "antd";
-import { UploadOutlined, DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { Button, Input, Modal, Select, Space, Typography, message, Upload, Skeleton } from "antd";
+import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 import api from "@/services/api";
 import axios from "axios";
 import { useAuthStore } from "@/stores/authStore";
@@ -21,8 +21,6 @@ export default function WritePage() {
   const [selectedTags, setSelectedTags] = useState([]);
   const [showPublish, setShowPublish] = useState(false);
   const [tags, setTags] = useState([]);
-  const [customTagInput, setCustomTagInput] = useState("");
-  const [showCustomTagInput, setShowCustomTagInput] = useState(false);
   const [coverImage, setCoverImage] = useState("");
   const [coverUploading, setCoverUploading] = useState(false);
   const [publishing, setPublishing] = useState(false);
@@ -52,7 +50,7 @@ export default function WritePage() {
           setContent(post.content || "");
           setCoverImage(post.cover_image || "");
           if (post.tags && post.tags.length > 0) {
-            setSelectedTags(post.tags.map((t) => t.id));
+            setSelectedTags(post.tags.map((t) => t.name));
           }
         }
       }).catch(() => {
@@ -62,29 +60,6 @@ export default function WritePage() {
       });
     }
   }, [editSlug, isAuthenticated, tags.length]);
-
-  const toggleTag = useCallback((tagId) => {
-    setSelectedTags((prev) =>
-      prev.includes(tagId) ? prev.filter((t) => t !== tagId) : prev.length < 5 ? [...prev, tagId] : prev
-    );
-  }, []);
-
-  const handleAddCustomTag = useCallback(() => {
-    const name = customTagInput.trim();
-    if (!name) return;
-    if (selectedTags.length >= 5) { message.warning("Maximum 5 tags"); return; }
-
-    const existing = tags.find((t) => t.name.toLowerCase() === name.toLowerCase());
-    if (existing) {
-      if (!selectedTags.includes(existing.id)) setSelectedTags((prev) => [...prev, existing.id]);
-    } else {
-      const tempId = `custom-${Date.now()}`;
-      setTags((prev) => [...prev, { id: tempId, name, slug: name.toLowerCase().replace(/\s+/g, "-"), isCustom: true }]);
-      setSelectedTags((prev) => [...prev, tempId]);
-    }
-    setCustomTagInput("");
-    setShowCustomTagInput(false);
-  }, [customTagInput, tags, selectedTags]);
 
   const handleCoverUpload = useCallback(async (file) => {
     setCoverUploading(true);
@@ -107,12 +82,14 @@ export default function WritePage() {
     return false;
   }, []);
 
-  const getTagPayload = useCallback(() => {
-    const existingTagIds = selectedTags.filter((id) => typeof id === "number");
-    const customTagNames = selectedTags
-      .filter((id) => typeof id === "string" && id.startsWith("custom-"))
-      .map((id) => tags.find((t) => t.id === id)?.name)
-      .filter(Boolean);
+  const buildTagPayload = useCallback(() => {
+    const existingTagIds = [];
+    const customTagNames = [];
+    selectedTags.forEach((name) => {
+      const found = tags.find((t) => t.name.toLowerCase() === name.toLowerCase());
+      if (found) existingTagIds.push(found.id);
+      else customTagNames.push(name);
+    });
     return { tags: existingTagIds, custom_tags: customTagNames };
   }, [selectedTags, tags]);
 
@@ -121,7 +98,7 @@ export default function WritePage() {
     if (!content.trim()) { message.warning("Please add some content"); return; }
     setPublishing(true);
     try {
-      const tagPayload = getTagPayload();
+      const tagPayload = buildTagPayload();
       let res;
       if (isEditMode && editSlug) {
         res = await api.patch(`/posts/${editSlug}`, {
@@ -144,13 +121,13 @@ export default function WritePage() {
     } finally {
       setPublishing(false);
     }
-  }, [title, content, coverImage, getTagPayload, router]);
+  }, [title, content, coverImage, buildTagPayload, router]);
 
   const handleSaveDraft = useCallback(async () => {
     if (!title.trim()) { message.warning("Please add a title"); return; }
     setSavingDraft(true);
     try {
-      const tagPayload = getTagPayload();
+      const tagPayload = buildTagPayload();
       await api.post("/posts", {
         title, content, cover_image: coverImage || null,
         ...tagPayload, status: "draft",
@@ -161,7 +138,7 @@ export default function WritePage() {
     } finally {
       setSavingDraft(false);
     }
-  }, [title, content, coverImage, getTagPayload]);
+  }, [title, content, coverImage, buildTagPayload]);
 
   if (!isAuthenticated) return null;
 
@@ -240,31 +217,10 @@ export default function WritePage() {
           {/* Tags */}
           <div>
             <Text strong style={{ display: "block", marginBottom: 8 }}>Tags (max 5)</Text>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
-              {tags.map((tag) => (
-                <Tag.CheckableTag
-                  key={tag.id}
-                  checked={selectedTags.includes(tag.id)}
-                  onChange={() => toggleTag(tag.id)}
-                  style={{ borderRadius: 12, padding: "2px 12px", border: tag.isCustom ? "1px dashed #2563eb" : undefined }}
-                >
-                  {tag.isCustom ? `✨ ${tag.name}` : tag.name}
-                </Tag.CheckableTag>
-              ))}
-            </div>
-            {showCustomTagInput ? (
-              <Space size={8}>
-                <Input size="small" placeholder="Tag name..." value={customTagInput}
-                  onChange={(e) => setCustomTagInput(e.target.value)} onPressEnter={handleAddCustomTag}
-                  style={{ width: 160, borderRadius: 8 }} autoFocus />
-                <Button size="small" type="primary" onClick={handleAddCustomTag} shape="round">Add</Button>
-                <Button size="small" onClick={() => { setShowCustomTagInput(false); setCustomTagInput(""); }} shape="round">Cancel</Button>
-              </Space>
-            ) : (
-              <Button size="small" type="dashed" icon={<PlusOutlined />}
-                onClick={() => setShowCustomTagInput(true)} shape="round"
-                disabled={selectedTags.length >= 5}>Create Custom Tag</Button>
-            )}
+            <Select mode="tags" placeholder="Type to add tags (up to 5)" maxCount={5} style={{ width: "100%" }}
+              tokenSeparators={[","]}
+              value={selectedTags} onChange={setSelectedTags}
+              options={tags.map((t) => ({ label: t.name, value: t.name }))} />
           </div>
         </div>
       </Modal>

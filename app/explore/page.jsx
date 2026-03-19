@@ -6,6 +6,7 @@ import ArticleCard from "@/components/articles/ArticleCard";
 import { formatNumber } from "@/lib/utils";
 import api from "@/services/api";
 import { normalizePost } from "@/lib/normalizers";
+import { MOCK_TAGS, MOCK_TRENDING, MOCK_POSTS, USE_MOCK } from "@/lib/mockData";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -20,13 +21,15 @@ export default function ExplorePage() {
   // Fetch tags on mount
   useEffect(() => {
     async function fetchTags() {
+      if (USE_MOCK) { setTags(MOCK_TAGS); return; }
       try {
         const res = await api.get("/tags");
         if (res.success) {
-          setTags(Array.isArray(res.data) ? res.data : res.data?.data || []);
+          const tagList = Array.isArray(res.data) ? res.data : res.data?.tags || res.data?.data || [];
+          setTags(tagList.length > 0 ? tagList : MOCK_TAGS);
         }
       } catch {
-        setTags([]);
+        setTags(MOCK_TAGS);
       }
     }
     fetchTags();
@@ -35,15 +38,17 @@ export default function ExplorePage() {
   // Fetch trending posts on mount
   useEffect(() => {
     async function fetchTrending() {
+      if (USE_MOCK) { setTrendingPosts(MOCK_TRENDING); setTrendingLoading(false); return; }
       setTrendingLoading(true);
       try {
         const res = await api.get("/posts?sort=popular&limit=5");
         if (res.success) {
           const tPosts = res.data?.posts || res.data || [];
-          setTrendingPosts((Array.isArray(tPosts) ? tPosts : []).map(normalizePost).filter(Boolean));
-        }
+          const normalized = (Array.isArray(tPosts) ? tPosts : []).map(normalizePost).filter(Boolean);
+          setTrendingPosts(normalized.length > 0 ? normalized : MOCK_TRENDING);
+        } else { setTrendingPosts(MOCK_TRENDING); }
       } catch {
-        setTrendingPosts([]);
+        setTrendingPosts(MOCK_TRENDING);
       }
       setTrendingLoading(false);
     }
@@ -52,6 +57,7 @@ export default function ExplorePage() {
 
   // Fetch posts on mount and when tag changes
   const fetchPosts = useCallback(async (tagSlug) => {
+    if (USE_MOCK) { setPosts(MOCK_POSTS); setLoading(false); return; }
     setLoading(true);
     try {
       const params = new URLSearchParams({ limit: "20" });
@@ -59,12 +65,13 @@ export default function ExplorePage() {
       const res = await api.get(`/posts?${params.toString()}`);
       if (res.success) {
         const pList = res.data?.posts || res.data || [];
-        setPosts((Array.isArray(pList) ? pList : []).map(normalizePost).filter(Boolean));
+        const normalized = (Array.isArray(pList) ? pList : []).map(normalizePost).filter(Boolean);
+        setPosts(normalized.length > 0 ? normalized : MOCK_POSTS);
       } else {
-        setPosts([]);
+        setPosts(MOCK_POSTS);
       }
     } catch {
-      setPosts([]);
+      setPosts(MOCK_POSTS);
     }
     setLoading(false);
   }, []);

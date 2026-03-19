@@ -12,7 +12,7 @@ export default function ProfilePageContent({ author, userPosts }) {
     <div>
       {/* Profile Header */}
       <div style={{
-        background: "linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(99,102,241,0.05) 100%)",
+        background: "linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(229,135,58,0.05) 100%)",
         padding: "64px 24px",
         textAlign: "center",
       }}>
