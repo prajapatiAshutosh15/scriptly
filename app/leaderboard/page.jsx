@@ -28,11 +28,11 @@ export default function LeaderboardPage() {
       </span>
     )},
     { title: "User", key: "user", render: (_, u) => (
-      <Link href={`/user/${u.username}`} style={{ display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}>
-        <Avatar src={u.avatar} size={36} style={{ background: "#2563eb", fontSize: 14, fontWeight: 600 }}>{u.name?.[0]}</Avatar>
+      <Link href={`/user/${u.username || ""}`} style={{ display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}>
+        <Avatar src={u.avatar} size={36} style={{ background: "#2563eb", fontSize: 14, fontWeight: 600 }}>{u.name?.[0] || "U"}</Avatar>
         <div>
-          <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: 14 }}>{u.name}</div>
-          <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>@{u.username}</div>
+          <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: 14 }}>{u.name || "Unknown"}</div>
+          <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>@{u.username || ""}</div>
         </div>
       </Link>
     )},

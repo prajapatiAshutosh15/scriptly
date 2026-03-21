@@ -84,7 +84,7 @@ export default function FeedPost({ post }) {
       {/* Tags */}
       {post.tags?.length > 0 && (
         <div style={{ display: "flex", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
-          {post.tags.slice(0, 4).map((tag) => (
+          {(post.tags || []).slice(0, 4).map((tag) => (
             <Link key={tag.slug || tag.name} href={`/tags/${tag.slug}`} style={{ textDecoration: "none" }}>
               <span className="tech-tag">#{tag.name || tag}</span>
             </Link>

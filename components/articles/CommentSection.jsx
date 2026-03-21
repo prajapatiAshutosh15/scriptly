@@ -12,7 +12,7 @@ const { TextArea } = Input;
 
 export default function CommentSection({ postId, comments: initialComments }) {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const [comments, setComments] = useState(initialComments);
+  const [comments, setComments] = useState(initialComments || []);
   const [newComment, setNewComment] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -73,11 +73,11 @@ export default function CommentSection({ postId, comments: initialComments }) {
         {comments.map((comment) => (
           <div key={comment.id} style={{ display: "flex", gap: 12 }}>
             <Avatar src={comment.author?.avatar} size={36}>
-              {comment.author?.name?.[0]}
+              {comment.author?.name?.[0] || "U"}
             </Avatar>
             <div style={{ flex: 1, minWidth: 0 }}>
               <Space size={8} align="center">
-                <Text strong style={{ fontSize: 13 }}>{comment.author?.name}</Text>
+                <Text strong style={{ fontSize: 13 }}>{comment.author?.name || "Unknown"}</Text>
                 <Text type="secondary" style={{ fontSize: 12 }}>{getRelativeTime(comment.createdAt)}</Text>
               </Space>
               <Paragraph style={{ margin: "6px 0", fontSize: 14, lineHeight: 1.7 }}>
@@ -85,7 +85,7 @@ export default function CommentSection({ postId, comments: initialComments }) {
               </Paragraph>
               <Space size={16}>
                 <Button type="text" size="small" icon={<HeartOutlined />} style={{ fontSize: 12, color: "var(--text-secondary)" }}>
-                  {comment.likes}
+                  {comment.likes || 0}
                 </Button>
                 <Button type="text" size="small" style={{ fontSize: 12, color: "var(--text-secondary)" }}>
                   Reply

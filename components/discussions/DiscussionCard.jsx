@@ -9,7 +9,7 @@ export default function DiscussionCard({ discussion }) {
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 16, padding: "14px 20px", borderBottom: "1px solid var(--border-color)" }}>
-      <Avatar src={author.avatar} size={36} style={{ background: "#2563eb", flexShrink: 0 }}>{author.name?.[0]}</Avatar>
+      <Avatar src={author?.avatar} size={36} style={{ background: "#2563eb", flexShrink: 0 }}>{author?.name?.[0] || "U"}</Avatar>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           {isPinned && <PushpinFilled style={{ color: "#f59e0b", fontSize: 12 }} />}
@@ -20,7 +20,7 @@ export default function DiscussionCard({ discussion }) {
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4, fontSize: 12, color: "var(--text-secondary)" }}>
           <Tag style={{ borderRadius: 12, margin: 0, fontSize: 11 }} color={categoryColor}>{categoryName}</Tag>
-          <span>{author.name}</span>
+          <span>{author?.name || "Unknown"}</span>
           <span>·</span>
           <span>{formatRelativeTime(lastActivityAt)}</span>
         </div>

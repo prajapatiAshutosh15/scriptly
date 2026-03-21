@@ -35,10 +35,10 @@ export default function QuestionCard({ question }) {
           ))}
         </Space>
         <div style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 8 }}>
-          <Link href={`/user/${author.username}`} style={{ display: "flex", alignItems: "center", gap: 6, textDecoration: "none" }}>
-            <Avatar src={author.avatar} size={20} style={{ background: "#2563eb" }}>{author.name?.[0]}</Avatar>
-            <span style={{ fontSize: 12, color: "#2563eb" }}>{author.name}</span>
-            {author.reputation && <span style={{ fontSize: 11, color: "var(--text-secondary)" }}>{author.reputation}</span>}
+          <Link href={`/user/${author?.username || ""}`} style={{ display: "flex", alignItems: "center", gap: 6, textDecoration: "none" }}>
+            <Avatar src={author?.avatar} size={20} style={{ background: "#2563eb" }}>{author?.name?.[0] || "U"}</Avatar>
+            <span style={{ fontSize: 12, color: "#2563eb" }}>{author?.name || "Unknown"}</span>
+            {author?.reputation && <span style={{ fontSize: 11, color: "var(--text-secondary)" }}>{author.reputation}</span>}
           </Link>
           <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>asked {formatRelativeTime(createdAt)}</span>
         </div>

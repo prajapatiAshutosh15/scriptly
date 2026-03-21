@@ -38,8 +38,8 @@ export default function NotificationBell() {
         key: n.id,
         label: (
           <div style={{ maxWidth: 280, padding: "4px 0" }}>
-            <Typography.Text strong style={{ fontSize: 13 }}>{n.actor_name || n.actor_username}</Typography.Text>
-            <Typography.Text style={{ fontSize: 13, marginLeft: 4 }}>{n.type.replace(/_/g, " ")}</Typography.Text>
+            <Typography.Text strong style={{ fontSize: 13 }}>{n.actor_name || n.actor_username || "Someone"}</Typography.Text>
+            <Typography.Text style={{ fontSize: 13, marginLeft: 4 }}>{(n.type || "").replace(/_/g, " ")}</Typography.Text>
             <div style={{ fontSize: 11, color: "var(--text-secondary)" }}>{getRelativeTime(n.created_at)}</div>
           </div>
         ),

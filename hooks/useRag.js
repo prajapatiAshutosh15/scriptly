@@ -4,13 +4,23 @@ import api from '@/services/api';
 
 export function useRag() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const ask = async (question, conversationId = null) => {
     setLoading(true);
+    setError(null);
     try {
-      const res = await api.post('/rag/ask', { question, conversation_id: conversationId });
+      const body = { question };
+      if (conversationId) body.conversation_id = conversationId;
+      const res = await api.post('/rag/ask', body);
       return res.data;
-    } finally { setLoading(false); }
+    } catch (err) {
+      const msg = err?.message || err?.error?.message || 'AI service error';
+      setError(msg);
+      throw new Error(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getConversations = async () => {
@@ -23,5 +33,5 @@ export function useRag() {
     return res.data;
   };
 
-  return { loading, ask, getConversations, getConversation };
+  return { loading, error, ask, getConversations, getConversation };
 }

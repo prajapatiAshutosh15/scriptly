@@ -5,12 +5,12 @@ import { getRelativeTime } from "@/lib/utils";
 export default function ArticleMeta({ author, publishedAt, readTime, likes, comments }) {
   return (
     <div className="flex items-center gap-3">
-      <Link href={`/user/${author.username}`}>
-        <Avatar src={author.avatar} alt={author.name} size="sm" />
+      <Link href={`/user/${author?.username || ""}`}>
+        <Avatar src={author?.avatar} alt={author?.name} size="sm" />
       </Link>
       <div className="flex flex-col">
-        <Link href={`/user/${author.username}`} className="text-sm font-medium text-gray-900 dark:text-white hover:text-primary transition-colors">
-          {author.name}
+        <Link href={`/user/${author?.username || ""}`} className="text-sm font-medium text-gray-900 dark:text-white hover:text-primary transition-colors">
+          {author?.name || "Unknown"}
         </Link>
         <div className="flex items-center gap-2 text-xs text-muted">
           <span>{getRelativeTime(publishedAt)}</span>

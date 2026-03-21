@@ -161,10 +161,10 @@ export default function ExplorePage() {
                         {post.title}
                       </Text>
                       <Space size={8} style={{ marginTop: 4 }}>
-                        <Avatar src={post.author.avatar} size={20}>{post.author.name[0]}</Avatar>
-                        <Text type="secondary" style={{ fontSize: 12 }}>{post.author.name}</Text>
+                        <Avatar src={post.author?.avatar} size={20}>{post.author?.name?.[0] || "U"}</Avatar>
+                        <Text type="secondary" style={{ fontSize: 12 }}>{post.author?.name || "Unknown"}</Text>
                         <Text type="secondary" style={{ fontSize: 12 }}>
-                          <ClockCircleOutlined /> {post.readTime}m
+                          <ClockCircleOutlined /> {post.readTime || 1}m
                         </Text>
                         <Text type="secondary" style={{ fontSize: 12 }}>
                           <HeartOutlined /> {formatNumber(post.likes)}
@@ -228,7 +228,7 @@ export default function ExplorePage() {
                         {tag.name}
                       </Text>
                     </Space>
-                    <Text type="secondary" style={{ fontSize: 12 }}>{formatNumber(tag.post_count || tag.postCount)}</Text>
+                    <Text type="secondary" style={{ fontSize: 12 }}>{formatNumber(tag.post_count || tag.postCount || 0)}</Text>
                   </div>
                 ))}
               </div>

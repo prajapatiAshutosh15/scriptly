@@ -91,10 +91,10 @@ function SearchContent() {
                 <div>
                   <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, color: "var(--text-primary)" }}>Discussions ({discussions.length})</h3>
                   {discussions.map((d) => (
-                    <Link key={d.id} href={`/discussions/${d.slug}`} style={{ textDecoration: "none" }}>
+                    <Link key={d.id} href={`/discussions/${d.slug || ""}`} style={{ textDecoration: "none" }}>
                       <Card hoverable style={{ borderRadius: 16, marginBottom: 8 }}>
                         <div style={{ fontWeight: 600, fontSize: 15, color: "var(--text-primary)" }}>{d.title}</div>
-                        <div style={{ fontSize: 12, color: "var(--text-secondary)", marginTop: 4 }}>{d.replies_count || 0} replies · by @{d.author_username}</div>
+                        <div style={{ fontSize: 12, color: "var(--text-secondary)", marginTop: 4 }}>{d.replies_count || 0} replies · by @{d.author_username || ""}</div>
                       </Card>
                     </Link>
                   ))}
@@ -107,13 +107,13 @@ function SearchContent() {
                   <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 12, color: "var(--text-primary)" }}>Users ({users.length})</h3>
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))", gap: 12 }}>
                     {users.map((u) => (
-                      <Link key={u.id} href={`/user/${u.username}`} style={{ textDecoration: "none" }}>
+                      <Link key={u.id} href={`/user/${u.username || ""}`} style={{ textDecoration: "none" }}>
                         <Card hoverable style={{ borderRadius: 16 }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                            <Avatar src={u.avatar} size={40} style={{ background: "#2563eb" }}>{u.name?.[0]}</Avatar>
+                            <Avatar src={u.avatar} size={40} style={{ background: "#2563eb" }}>{u.name?.[0] || "U"}</Avatar>
                             <div>
-                              <div style={{ fontWeight: 600, color: "var(--text-primary)" }}>{u.name}</div>
-                              <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>@{u.username} · {u.reputation || 0} rep</div>
+                              <div style={{ fontWeight: 600, color: "var(--text-primary)" }}>{u.name || "Unknown"}</div>
+                              <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>@{u.username || ""} · {u.reputation || 0} rep</div>
                             </div>
                           </div>
                         </Card>

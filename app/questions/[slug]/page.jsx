@@ -76,8 +76,8 @@ export default function QuestionDetailPage() {
       <h1 style={{ fontSize: 24, fontWeight: 700, lineHeight: 1.3, margin: 0, color: "var(--text-primary)" }}>{question.title}</h1>
       <div style={{ display: "flex", gap: 16, marginTop: 8, fontSize: 13, color: "var(--text-secondary)" }}>
         <span>Asked {formatRelativeTime(question.createdAt)}</span>
-        <span>Viewed {question.views} times</span>
-        <span>{question.answers} answers</span>
+        <span>Viewed {question.views || 0} times</span>
+        <span>{question.answers || 0} answers</span>
       </div>
       <Divider style={{ margin: "16px 0" }} />
       <div style={{ display: "flex", gap: 20 }}>
@@ -90,7 +90,7 @@ export default function QuestionDetailPage() {
           <div style={{ marginTop: 16, display: "flex", justifyContent: "flex-end" }}>
             <div style={{ background: "rgba(37,99,235,0.05)", padding: "8px 12px", borderRadius: 8 }}>
               <div style={{ fontSize: 12, color: "var(--text-secondary)", marginBottom: 4 }}>asked {formatRelativeTime(question.createdAt)}</div>
-              <UserMiniCard name={question.author.name} username={question.author.username} avatar={question.author.avatar} reputation={question.author.reputation} />
+              <UserMiniCard name={question.author?.name} username={question.author?.username} avatar={question.author?.avatar} reputation={question.author?.reputation} />
             </div>
           </div>
         </div>
@@ -99,7 +99,7 @@ export default function QuestionDetailPage() {
       <h2 style={{ fontSize: 18, fontWeight: 600, color: "var(--text-primary)" }}>{answers.length} {answers.length === 1 ? "Answer" : "Answers"}</h2>
       {answers.map((a) => (
         <div key={a.id}>
-          <AnswerCard answer={a} questionAuthorId={question.author.id} currentUserId={user?.id} onVote={handleAnswerVote} onAccept={handleAccept} />
+          <AnswerCard answer={a} questionAuthorId={question.author?.id} currentUserId={user?.id} onVote={handleAnswerVote} onAccept={handleAccept} />
           <Divider style={{ margin: 0 }} />
         </div>
       ))}

@@ -108,7 +108,7 @@ export default function AboutPage() {
           {team.map((member, i) => (
             <Col xs={24} sm={12} md={8} key={i}>
               <Card style={{ borderRadius: 16, textAlign: "center" }}>
-                <Avatar src={member.avatar} size={80} style={{ marginBottom: 16 }}>{member.name[0]}</Avatar>
+                <Avatar src={member.avatar} size={80} style={{ marginBottom: 16 }}>{member.name?.[0] || "U"}</Avatar>
                 <Title level={5} style={{ margin: 0 }}>{member.name}</Title>
                 <Text type="secondary" style={{ fontSize: 13 }}>{member.role}</Text>
                 <Paragraph type="secondary" style={{ marginTop: 8, fontSize: 13 }}>{member.bio}</Paragraph>

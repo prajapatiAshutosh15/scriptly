@@ -20,7 +20,7 @@ export default function TagsPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const filtered = tags.filter((t) => t.name.toLowerCase().includes(search.toLowerCase()));
+  const filtered = tags.filter((t) => (t.name || "").toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 24px" }}>

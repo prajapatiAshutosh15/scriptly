@@ -16,7 +16,7 @@ async function fetchPost(slug) {
     if (!res.ok) return null;
     const json = await res.json();
     if (!json.success) return null;
-    return json.data;
+    return json.data?.post || json.data;
   } catch {
     return null;
   }

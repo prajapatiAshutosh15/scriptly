@@ -130,7 +130,7 @@ export default function CareersPage() {
                     </Text>
                   </Space>
                   <div style={{ marginTop: 8 }}>
-                    {job.tags.map((tag) => (
+                    {(job.tags || []).map((tag) => (
                       <Tag key={tag} color="blue" style={{ borderRadius: 12, margin: "2px 4px 2px 0" }}>{tag}</Tag>
                     ))}
                   </div>

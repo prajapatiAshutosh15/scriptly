@@ -33,7 +33,7 @@ export default function AskQuestionPage() {
       const existingTagIds = [];
       const customTagNames = [];
       selectedTags.forEach((name) => {
-        const found = tags.find((t) => t.name.toLowerCase() === name.toLowerCase());
+        const found = tags.find((t) => (t.name || "").toLowerCase() === name.toLowerCase());
         if (found) existingTagIds.push(found.id);
         else customTagNames.push(name);
       });

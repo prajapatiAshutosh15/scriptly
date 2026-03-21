@@ -16,20 +16,20 @@ export default function ProfilePageContent({ author, userPosts }) {
         padding: "64px 24px",
         textAlign: "center",
       }}>
-        <Avatar src={author.avatar} size={96} style={{ marginBottom: 16, border: "4px solid #fff", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
-          {author.name[0]}
+        <Avatar src={author?.avatar} size={96} style={{ marginBottom: 16, border: "4px solid #fff", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+          {author?.name?.[0] || "U"}
         </Avatar>
-        <Title level={2} style={{ margin: 0 }}>{author.name}</Title>
-        <Text type="secondary" style={{ fontSize: 15 }}>@{author.username}</Text>
+        <Title level={2} style={{ margin: 0 }}>{author?.name || "Unknown"}</Title>
+        <Text type="secondary" style={{ fontSize: 15 }}>@{author?.username || ""}</Text>
         <Paragraph type="secondary" style={{ maxWidth: 500, margin: "16px auto 0", fontSize: 15, lineHeight: 1.7 }}>
-          {author.bio}
+          {author?.bio}
         </Paragraph>
 
         <Space size={32} style={{ marginTop: 24 }}>
           {[
-            { value: userPosts.length, label: "Posts" },
-            { value: formatNumber(author.followers), label: "Followers" },
-            { value: formatNumber(author.following), label: "Following" },
+            { value: author?.postsCount || userPosts?.length || 0, label: "Posts" },
+            { value: formatNumber(author?.followers || 0), label: "Followers" },
+            { value: formatNumber(author?.following || 0), label: "Following" },
           ].map((stat, i) => (
             <div key={i} style={{ textAlign: "center" }}>
               <div style={{ fontWeight: 700, fontSize: 20 }}>{stat.value}</div>
@@ -44,10 +44,10 @@ export default function ProfilePageContent({ author, userPosts }) {
           </Button>
           <Space size={8}>
             <Text type="secondary" style={{ fontSize: 13 }}>
-              <EnvironmentOutlined /> {author.location}
+              <EnvironmentOutlined /> {author?.location || ""}
             </Text>
             <Text type="secondary" style={{ fontSize: 13 }}>
-              <CalendarOutlined /> Joined {formatDate(author.joinedDate)}
+              <CalendarOutlined /> Joined {formatDate(author?.joinedDate)}
             </Text>
           </Space>
         </div>

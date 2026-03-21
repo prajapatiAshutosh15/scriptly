@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback, lazy, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Button, Input, Modal, Select, Space, Typography, message, Upload, Skeleton } from "antd";
+import { Button, Input, Modal, Select, Space, Typography, App, Upload, Skeleton } from "antd";
 import { UploadOutlined, DeleteOutlined } from "@ant-design/icons";
 import api from "@/services/api";
 import axios from "axios";
@@ -16,6 +16,7 @@ export default function WritePage() {
   const searchParams = useSearchParams();
   const editSlug = searchParams.get("edit");
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const { message } = App.useApp();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
@@ -44,13 +45,13 @@ export default function WritePage() {
       setIsEditMode(true);
       setEditLoading(true);
       api.get(`/posts/${editSlug}`).then((res) => {
-        const post = res.data;
+        const post = res.data?.post || res.data;
         if (post) {
           setTitle(post.title || "");
           setContent(post.content || "");
           setCoverImage(post.cover_image || "");
           if (post.tags && post.tags.length > 0) {
-            setSelectedTags(post.tags.map((t) => t.name));
+            setSelectedTags((post.tags || []).map((t) => t.name));
           }
         }
       }).catch(() => {
@@ -86,7 +87,7 @@ export default function WritePage() {
     const existingTagIds = [];
     const customTagNames = [];
     selectedTags.forEach((name) => {
-      const found = tags.find((t) => t.name.toLowerCase() === name.toLowerCase());
+      const found = tags.find((t) => (t.name || "").toLowerCase() === name.toLowerCase());
       if (found) existingTagIds.push(found.id);
       else customTagNames.push(name);
     });
@@ -114,7 +115,7 @@ export default function WritePage() {
         message.success("Published!");
       }
       setShowPublish(false);
-      const slug = res.data?.slug || editSlug;
+      const slug = res.data?.post?.slug || res.data?.slug || editSlug;
       if (slug) router.push(`/post/${slug}`);
     } catch (err) {
       message.error(err?.error?.message || "Failed to publish");

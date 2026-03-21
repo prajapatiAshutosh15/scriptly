@@ -23,7 +23,7 @@ export default function AnswerCard({ answer, questionAuthorId, currentUserId, on
         <div style={{ marginTop: 16, display: "flex", justifyContent: "flex-end" }}>
           <div style={{ background: answer.isAccepted ? "rgba(34,197,94,0.05)" : "rgba(37,99,235,0.05)", padding: "8px 12px", borderRadius: 8 }}>
             <div style={{ fontSize: 12, color: "var(--text-secondary)", marginBottom: 4 }}>answered {formatRelativeTime(answer.createdAt)}</div>
-            <UserMiniCard name={answer.author.name} username={answer.author.username} avatar={answer.author.avatar} reputation={answer.author.reputation} />
+            <UserMiniCard name={answer.author?.name} username={answer.author?.username} avatar={answer.author?.avatar} reputation={answer.author?.reputation} />
           </div>
         </div>
       </div>

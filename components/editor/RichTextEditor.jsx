@@ -4,8 +4,11 @@ import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
-import CodeBlock from "@tiptap/extension-code-block";
-import { Button, Space, Tooltip, Divider } from "antd";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { common, createLowlight } from "lowlight";
+
+const lowlight = createLowlight(common);
+import { Button, Space, Tooltip } from "antd";
 import {
   BoldOutlined,
   ItalicOutlined,
@@ -39,7 +42,7 @@ export default function RichTextEditor({ content, onChange, placeholder, minHeig
     immediatelyRender: false,
     extensions: [
       StarterKit.configure({ codeBlock: false }),
-      CodeBlock,
+      CodeBlockLowlight.configure({ lowlight }),
       Placeholder.configure({
         placeholder: placeholder || "Start writing your story...",
       }),
@@ -138,7 +141,7 @@ export default function RichTextEditor({ content, onChange, placeholder, minHeig
           <ToolBtn icon={<StrikethroughOutlined />} title="Strikethrough"
             action={() => editor.chain().focus().toggleStrike().run()} isActive={editor.isActive("strike")} />
 
-          <Divider type="vertical" style={{ margin: "0 4px" }} />
+          <span style={{ width: 1, height: 20, background: "var(--border-color)", margin: "0 6px", display: "inline-block", verticalAlign: "middle" }} />
 
           <ToolBtn icon={<FontSizeOutlined />} title="Heading 2"
             action={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} isActive={editor.isActive("heading", { level: 2 })} />
@@ -149,14 +152,14 @@ export default function RichTextEditor({ content, onChange, placeholder, minHeig
               style={{ minWidth: 32, fontSize: 12, fontWeight: 700 }}>H3</Button>
           </Tooltip>
 
-          <Divider type="vertical" style={{ margin: "0 4px" }} />
+          <span style={{ width: 1, height: 20, background: "var(--border-color)", margin: "0 6px", display: "inline-block", verticalAlign: "middle" }} />
 
           <ToolBtn icon={<UnorderedListOutlined />} title="Bullet List"
             action={() => editor.chain().focus().toggleBulletList().run()} isActive={editor.isActive("bulletList")} />
           <ToolBtn icon={<OrderedListOutlined />} title="Numbered List"
             action={() => editor.chain().focus().toggleOrderedList().run()} isActive={editor.isActive("orderedList")} />
 
-          <Divider type="vertical" style={{ margin: "0 4px" }} />
+          <span style={{ width: 1, height: 20, background: "var(--border-color)", margin: "0 6px", display: "inline-block", verticalAlign: "middle" }} />
 
           <ToolBtn icon={<CodeOutlined />} title="Code Block"
             action={() => editor.chain().focus().toggleCodeBlock().run()} isActive={editor.isActive("codeBlock")} />
@@ -167,14 +170,14 @@ export default function RichTextEditor({ content, onChange, placeholder, minHeig
               style={{ minWidth: 32, fontSize: 16 }}>&ldquo;</Button>
           </Tooltip>
 
-          <Divider type="vertical" style={{ margin: "0 4px" }} />
+          <span style={{ width: 1, height: 20, background: "var(--border-color)", margin: "0 6px", display: "inline-block", verticalAlign: "middle" }} />
 
           <ToolBtn icon={<LinkOutlined />} title="Add Link" action={addLink} />
           <ToolBtn icon={<PictureOutlined />} title="Add Image" action={addImage} />
           <ToolBtn icon={<LineOutlined />} title="Horizontal Rule"
             action={() => editor.chain().focus().setHorizontalRule().run()} />
 
-          <Divider type="vertical" style={{ margin: "0 4px" }} />
+          <span style={{ width: 1, height: 20, background: "var(--border-color)", margin: "0 6px", display: "inline-block", verticalAlign: "middle" }} />
 
           <ToolBtn icon={<UndoOutlined />} title="Undo" action={() => editor.chain().focus().undo().run()} />
           <ToolBtn icon={<RedoOutlined />} title="Redo" action={() => editor.chain().focus().redo().run()} />

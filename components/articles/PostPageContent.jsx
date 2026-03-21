@@ -96,7 +96,7 @@ export default function PostPageContent({ post, postComments, relatedPosts }) {
         {/* Main Content */}
         <div style={{ maxWidth: 740, minWidth: 0 }}>
           <Space size={6} wrap style={{ marginBottom: 16 }}>
-            {post.tags.map((tag) => (
+            {(post.tags || []).map((tag) => (
               <Tag key={tag.id || tag.slug || tag} color="blue" style={{ borderRadius: 12 }}>{tag.name || tag}</Tag>
             ))}
           </Space>
@@ -113,12 +113,12 @@ export default function PostPageContent({ post, postComments, relatedPosts }) {
             marginBottom: 32,
             borderBottom: "1px solid var(--border-color)",
           }} className="post-author-section">
-            <Link href={`/user/${post.author.username}`}>
-              <Avatar src={post.author.avatar} size={56}>{post.author.name[0]}</Avatar>
+            <Link href={`/user/${post.author?.username || ""}`}>
+              <Avatar src={post.author?.avatar} size={56}>{post.author?.name?.[0] || "U"}</Avatar>
             </Link>
             <div style={{ flex: 1 }}>
-              <Link href={`/user/${post.author.username}`} style={{ textDecoration: "none" }}>
-                <Text strong style={{ fontSize: 16 }}>{post.author.name}</Text>
+              <Link href={`/user/${post.author?.username || ""}`} style={{ textDecoration: "none" }}>
+                <Text strong style={{ fontSize: 16 }}>{post.author?.name || "Unknown"}</Text>
               </Link>
               <div style={{ marginTop: 4 }}>
                 <Space size={16}>
@@ -126,7 +126,7 @@ export default function PostPageContent({ post, postComments, relatedPosts }) {
                     <CalendarOutlined /> {formatDate(post.publishedAt)}
                   </Text>
                   <Text type="secondary" style={{ fontSize: 13 }}>
-                    <ClockCircleOutlined /> {post.readTime} min read
+                    <ClockCircleOutlined /> {post.readTime || 1} min read
                   </Text>
                 </Space>
               </div>
@@ -204,7 +204,7 @@ export default function PostPageContent({ post, postComments, relatedPosts }) {
       </div>
 
       {/* Related Posts */}
-      {relatedPosts.length > 0 && (
+      {relatedPosts?.length > 0 && (
         <div style={{ marginTop: 64 }}>
           <Divider />
           <Title level={3} style={{ marginBottom: 24 }}>More Articles</Title>

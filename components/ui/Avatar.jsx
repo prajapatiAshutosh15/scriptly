@@ -8,7 +8,7 @@ const sizeMap = {
 };
 
 export default function Avatar({ src, alt, size = "md", className }) {
-  const initials = alt ? alt.split(" ").map(n => n[0]).join("").slice(0, 2) : "?";
+  const initials = alt ? alt.split(" ").map(n => n?.[0] || "").join("").slice(0, 2) || "?" : "?";
 
   return (
     <div className={cn("relative rounded-full overflow-hidden bg-primary-light flex items-center justify-center", sizeMap[size], className)}>

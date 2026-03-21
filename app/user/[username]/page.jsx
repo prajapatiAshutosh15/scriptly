@@ -10,7 +10,7 @@ async function fetchUser(username) {
     if (!res.ok) return null;
     const json = await res.json();
     if (!json.success) return null;
-    return normalizeUser(json.data);
+    return normalizeUser(json.data?.user || json.data);
   } catch {
     return null;
   }
@@ -18,11 +18,11 @@ async function fetchUser(username) {
 
 async function fetchUserPosts(username) {
   try {
-    const res = await fetch(`${API_URL}/posts?author=${username}&limit=20`, { cache: 'no-store' });
+    const res = await fetch(`${API_URL}/users/${username}/posts?limit=20`, { cache: 'no-store' });
     if (!res.ok) return [];
     const json = await res.json();
     if (!json.success) return [];
-    const list = extractList(json, 'posts');
+    const list = json.data?.posts || extractList(json, 'posts');
     return list.map(normalizePost).filter(Boolean);
   } catch {
     return [];

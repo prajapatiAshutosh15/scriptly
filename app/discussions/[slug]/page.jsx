@@ -68,7 +68,7 @@ export default function DiscussionDetailPage() {
       </div>
       <h1 style={{ fontSize: 24, fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>{discussion.title}</h1>
       <div style={{ marginTop: 12 }}>
-        <UserMiniCard name={discussion.author.name} username={discussion.author.username} avatar={discussion.author.avatar} time={formatRelativeTime(discussion.createdAt)} />
+        <UserMiniCard name={discussion.author?.name} username={discussion.author?.username} avatar={discussion.author?.avatar} time={formatRelativeTime(discussion.createdAt)} />
       </div>
       <div style={{ marginTop: 20 }}><ArticleContent content={discussion.body} /></div>
       <Divider />
@@ -76,10 +76,10 @@ export default function DiscussionDetailPage() {
       {replies.map((reply) => (
         <div key={reply.id} style={{ padding: "16px 0", borderBottom: "1px solid var(--border-color)" }}>
           <div style={{ display: "flex", gap: 12 }}>
-            <Avatar src={reply.author_avatar} size={32} style={{ background: "#2563eb", flexShrink: 0 }}>{reply.author_name?.[0]}</Avatar>
+            <Avatar src={reply.author_avatar} size={32} style={{ background: "#2563eb", flexShrink: 0 }}>{reply.author_name?.[0] || "U"}</Avatar>
             <div style={{ flex: 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                <span style={{ fontWeight: 600, fontSize: 13, color: "var(--text-primary)" }}>{reply.author_name}</span>
+                <span style={{ fontWeight: 600, fontSize: 13, color: "var(--text-primary)" }}>{reply.author_name || "Unknown"}</span>
                 <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>{formatRelativeTime(reply.created_at)}</span>
               </div>
               <ArticleContent content={reply.body} />

@@ -15,7 +15,7 @@ export default function ReputationBadge({ reputation = 0, showLabel = true }) {
 
   return (
     <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-      <span style={{ fontWeight: 600, color: tier.color, fontSize: 13 }}>{reputation.toLocaleString()}</span>
+      <span style={{ fontWeight: 600, color: tier.color, fontSize: 13 }}>{(reputation || 0).toLocaleString()}</span>
       {showLabel && <Tag style={{ borderRadius: 12, fontSize: 11, margin: 0 }} color={tier.color}>{tier.label}</Tag>}
     </span>
   );
