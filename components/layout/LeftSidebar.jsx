@@ -60,7 +60,7 @@ export default function LeftSidebar() {
   };
 
   return (
-    <aside style={{ borderRight: "1px solid #2a2a2a" }}>
+    <aside className="left-sidebar" style={{ borderRight: "1px solid #2a2a2a" }}>
       <div style={{ position: "sticky", top: 64, height: "calc(100vh - 64px)", overflowY: "auto", padding: "16px 0" }}>
       <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <div>

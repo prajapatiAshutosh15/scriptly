@@ -72,15 +72,15 @@ export default function QuestionDetailPage() {
   if (!question) return null;
 
   return (
-    <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
+    <div className="question-detail-wrapper" style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
       <h1 style={{ fontSize: 24, fontWeight: 700, lineHeight: 1.3, margin: 0, color: "var(--text-primary)" }}>{question.title}</h1>
-      <div style={{ display: "flex", gap: 16, marginTop: 8, fontSize: 13, color: "var(--text-secondary)" }}>
+      <div className="question-meta" style={{ display: "flex", gap: 16, marginTop: 8, fontSize: 13, color: "var(--text-secondary)" }}>
         <span>Asked {formatRelativeTime(question.createdAt)}</span>
         <span>Viewed {question.views || 0} times</span>
         <span>{question.answers || 0} answers</span>
       </div>
       <Divider style={{ margin: "16px 0" }} />
-      <div style={{ display: "flex", gap: 20 }}>
+      <div className="question-vote-content" style={{ display: "flex", gap: 20 }}>
         <VoteButtons votes={question.votes} userVote={question.userVote} onVote={handleVote} />
         <div style={{ flex: 1, minWidth: 0 }}>
           <ArticleContent content={question.body} />

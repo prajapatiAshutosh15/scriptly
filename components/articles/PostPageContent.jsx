@@ -58,7 +58,7 @@ export default function PostPageContent({ post, postComments, relatedPosts }) {
   }
 
   return (
-    <div style={{ maxWidth: 1280, margin: "0 auto", padding: "32px 24px" }}>
+    <div className="page-wrapper" style={{ maxWidth: 1280, margin: "0 auto", padding: "32px 24px" }}>
       {/* Cover Image */}
       <div style={{
         borderRadius: 20,

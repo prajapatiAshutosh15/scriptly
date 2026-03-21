@@ -56,11 +56,11 @@ export default function DiscussionDetailPage() {
     finally { setSubmitting(false); }
   };
 
-  if (loading) return <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}><Skeleton active paragraph={{ rows: 10 }} /></div>;
+  if (loading) return <div className="discussion-detail" style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}><Skeleton active paragraph={{ rows: 10 }} /></div>;
   if (!discussion) return null;
 
   return (
-    <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
+    <div className="discussion-detail" style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
         {discussion.isPinned && <PushpinFilled style={{ color: "#f59e0b" }} />}
         {discussion.isLocked && <LockFilled style={{ color: "var(--text-secondary)" }} />}

@@ -248,15 +248,17 @@ main {
 
 /* Large screens and below (≤1280px) — hide right sidebar */
 @media (max-width: 1280px) {
-  .app-layout { grid-template-columns: 240px 1fr; }
-  .right-sidebar { display: none; }
+  .app-layout { grid-template-columns: 240px 1fr !important; }
+  .right-sidebar, .app-layout > div:last-child { display: none !important; }
 }
 
 /* Tablet and below (≤1024px) — hide left sidebar */
 @media (max-width: 1024px) {
-  .app-layout { grid-template-columns: 1fr; }
-  .left-sidebar { display: none; }
+  .app-layout { grid-template-columns: 1fr !important; }
+  .left-sidebar, .app-layout > aside { display: none !important; }
   .mobile-only { display: inline-flex !important; }
+  .hidden-mobile { display: none !important; }
+  .main-feed { padding: 16px !important; }
   .home-grid { grid-template-columns: 1fr !important; }
   .sidebar-desktop { display: none; }
   .explore-grid { grid-template-columns: 1fr !important; }
@@ -264,6 +266,16 @@ main {
   .post-grid { grid-template-columns: 1fr !important; }
   .reaction-desktop, .toc-desktop { display: none !important; }
   .reaction-mobile { display: block !important; }
+
+  /* Question detail — stack vote + content vertically */
+  .question-vote-content { flex-direction: column !important; }
+  .question-vote-content > div:first-child { flex-direction: row !important; }
+
+  /* Discussion detail — full width */
+  .discussion-detail { padding: 24px 16px !important; }
+
+  /* PostComposer — hide button labels on tablet */
+  .composer-btn-label { display: none !important; }
 }
 
 /* Mobile (≤768px) */
@@ -272,7 +284,13 @@ main {
   .mobile-only { display: inline-flex !important; }
   .nav-links-desktop, .search-desktop { display: none !important; }
 
-  .main-feed { padding: 16px; }
+  .main-feed { padding: 12px !important; }
+
+  /* Feed post */
+  .feed-post { padding: 14px !important; }
+  .feed-post-cover { height: 160px !important; }
+  .engagement-bar { gap: 12px !important; }
+  .engagement-bar span { font-size: 12px !important; }
 
   /* Hero section */
   .hero-slide { height: 380px !important; min-height: 380px !important; }
@@ -298,10 +316,10 @@ main {
   .post-author-section { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
 
   /* Prose content on mobile */
-  .prose h1 { font-size: 1.625rem; }
-  .prose h2 { font-size: 1.375rem; }
+  .prose p { font-size: 15px !important; }
+  .prose h1 { font-size: 1.5rem !important; }
+  .prose h2 { font-size: 1.25rem !important; }
   .prose h3 { font-size: 1.125rem; }
-  .prose p { font-size: 1rem; line-height: 1.75; }
   .prose pre { font-size: 0.8rem; padding: 0.875rem; }
 
   /* Footer grid */
@@ -328,6 +346,11 @@ main {
   /* General spacing */
   .page-container { padding: 16px !important; }
   .section-padding { padding: 24px 16px !important; }
+
+  /* Question detail page */
+  .question-detail-wrapper { padding: 24px 12px !important; }
+  .question-detail-wrapper h1 { font-size: 20px !important; }
+  .question-meta { flex-wrap: wrap !important; gap: 8px !important; }
 }
 
 /* Small phones (≤480px) */

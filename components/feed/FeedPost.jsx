@@ -112,12 +112,12 @@ export default function FeedPost({ post }) {
       {/* Cover image (optional, smaller) */}
       {post.coverImage && (
         <Link href={`/post/${post.slug}`}>
-          <img src={post.coverImage} alt="" style={{ width: "100%", height: 200, objectFit: "cover", borderRadius: 8, marginTop: 12 }} />
+          <img src={post.coverImage} alt="" className="feed-post-cover" style={{ width: "100%", height: 200, objectFit: "cover", borderRadius: 8, marginTop: 12 }} />
         </Link>
       )}
 
       {/* Engagement bar */}
-      <div style={{
+      <div className="engagement-bar" style={{
         display: "flex", alignItems: "center", gap: 20,
         marginTop: 16, paddingTop: 12,
         borderTop: "1px solid var(--border-color)",
