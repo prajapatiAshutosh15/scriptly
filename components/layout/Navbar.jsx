@@ -7,7 +7,7 @@ import {
   SearchOutlined, MenuOutlined, UserOutlined, LogoutOutlined,
   BookOutlined, SettingOutlined, TrophyOutlined, EditOutlined,
   HomeOutlined, QuestionCircleOutlined, MessageOutlined,
-  TagsOutlined, CompassOutlined, BellOutlined,
+  TagsOutlined, CompassOutlined, BellOutlined, RobotOutlined,
 } from "@ant-design/icons";
 import { SITE_NAME } from "@/lib/constants";
 import ThemeToggle from "@/components/ui/ThemeToggle";
@@ -21,6 +21,7 @@ const SIDEBAR_NAV = [
   { label: "Discussions", href: "/discussions", icon: <MessageOutlined /> },
   { label: "Tags", href: "/tags", icon: <TagsOutlined /> },
   { label: "Explore", href: "/explore", icon: <CompassOutlined /> },
+  { label: "AI Assistant", href: "/ai-assistant", icon: <RobotOutlined /> },
   { label: "Bookmarks", href: "/bookmarks", icon: <BookOutlined /> },
   { label: "Notifications", href: "/notifications", icon: <BellOutlined /> },
   { label: "Settings", href: "/settings", icon: <SettingOutlined /> },
