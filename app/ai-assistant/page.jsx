@@ -25,7 +25,11 @@ export default function AiAssistantPage() {
   const [thinkingMsg, setThinkingMsg] = useState("");
   const bottomRef = useRef(null);
 
-  useEffect(() => { if (!isAuthenticated) router.push("/signin"); }, []);
+  useEffect(() => {
+    if (!isAuthenticated) { router.push("/signin"); return; }
+    // Pre-wake RAG service by hitting a lightweight endpoint
+    api.post('/rag/ask', { question: "ping" }).catch(() => {});
+  }, []);
 
   // Auto-scroll to bottom
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [messages, loading]);
@@ -42,6 +46,21 @@ export default function AiAssistantPage() {
     return () => clearInterval(interval);
   }, [loading]);
 
+  const callRag = async (question, retries = 2) => {
+    const body = { question };
+    try {
+      const res = await api.post('/rag/ask', body);
+      return res.data || res;
+    } catch (err) {
+      if (retries > 0) {
+        // Service might be waking up — wait and retry
+        await new Promise(r => setTimeout(r, 5000));
+        return callRag(question, retries - 1);
+      }
+      throw err;
+    }
+  };
+
   const handleSend = async () => {
     if (!input.trim() || loading) return;
     const question = input.trim();
@@ -50,13 +69,9 @@ export default function AiAssistantPage() {
     setLoading(true);
 
     try {
-      const body = { question };
-      const res = await api.post('/rag/ask', body);
-      const result = res.data || res;
+      const result = await callRag(question);
       const answer = result?.answer || "I couldn't find an answer.";
       const sources = (result?.sources || []).filter(s => (s.similarity || 0) > 0.1);
-
-      // Only show the best matching source
       const bestSource = sources.length > 0 ? sources[0] : null;
 
       setMessages((prev) => [...prev, {
@@ -67,7 +82,7 @@ export default function AiAssistantPage() {
     } catch (err) {
       setMessages((prev) => [...prev, {
         role: "assistant",
-        content: "The AI service is waking up (free tier sleeps after inactivity). **Please try again in about 30 seconds** — it just needs a moment to start up! ☕",
+        content: "Sorry, I couldn't connect to the AI service. Please try again.",
       }]);
     } finally {
       setLoading(false);
