@@ -54,7 +54,7 @@ export default function Logo({ size = 36, showText = true, textSize = 20 }) {
           fontFamily: "'JetBrains Mono', monospace",
           fontWeight: 700,
           fontSize: textSize,
-          color: "#e8e8e8",
+          color: "var(--text-primary)",
           letterSpacing: "-0.02em",
           lineHeight: 1,
         }}>

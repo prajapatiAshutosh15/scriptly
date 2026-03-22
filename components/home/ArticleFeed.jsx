@@ -78,8 +78,8 @@ export default function ArticleFeed() {
                 display: "flex", alignItems: "center", gap: 6,
                 padding: "12px 0", cursor: "pointer", fontSize: 15,
                 fontWeight: isActive ? 600 : 400,
-                color: isActive ? "#e8e8e8" : "#888888",
-                borderBottom: isActive ? "2px solid #e5873a" : "2px solid transparent",
+                color: isActive ? "var(--text-primary)" : "var(--text-secondary)",
+                borderBottom: isActive ? "2px solid var(--accent)" : "2px solid transparent",
                 transition: "all 0.15s",
               }}>
               {tab.icon} {tab.label}

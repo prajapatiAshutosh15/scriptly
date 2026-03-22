@@ -96,8 +96,8 @@ export default function Navbar() {
               style={{
                 borderRadius: 20,
                 fontSize: 13,
-                border: "1px solid #2a2a2a",
-                background: "#1a1a1a",
+                border: "1px solid var(--border-color)",
+                background: "var(--bg-surface)",
               }}
               allowClear
             />
@@ -129,16 +129,16 @@ export default function Navbar() {
                 <button style={{
                   padding: "8px 20px",
                   borderRadius: 8,
-                  background: "#242424",
-                  color: "#e8e8e8",
-                  border: "1px solid #2a2a2a",
+                  background: "var(--bg-surface)",
+                  color: "var(--text-primary)",
+                  border: "1px solid var(--border-color)",
                   fontWeight: 600,
                   fontSize: 14,
                   cursor: "pointer",
                   transition: "all 0.2s",
                 }}
-                  onMouseOver={(e) => { e.currentTarget.style.borderColor = "#e5873a"; e.currentTarget.style.color = "#e5873a"; }}
-                  onMouseOut={(e) => { e.currentTarget.style.borderColor = "#2a2a2a"; e.currentTarget.style.color = "#e8e8e8"; }}
+                  onMouseOver={(e) => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.color = "var(--accent)"; }}
+                  onMouseOut={(e) => { e.currentTarget.style.borderColor = "var(--border-color)"; e.currentTarget.style.color = "var(--text-primary)"; }}
                 >
                   Sign In
                 </button>

@@ -67,7 +67,7 @@ export default function AiAssistantPage() {
     } catch (err) {
       setMessages((prev) => [...prev, {
         role: "assistant",
-        content: "Oops! I'm having trouble right now. The AI service might be waking up — try again in a few seconds.",
+        content: "The AI service is waking up (free tier sleeps after inactivity). **Please try again in about 30 seconds** — it just needs a moment to start up! ☕",
       }]);
     } finally {
       setLoading(false);

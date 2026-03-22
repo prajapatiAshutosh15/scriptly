@@ -87,11 +87,20 @@ body {
 }
 
 .light body::before { display: none; }
-.light .feed-post { border-color: #d1d5db; }
+.light .feed-post { border-color: #d1d5db; background: #ffffff; }
 .light .feed-post:hover { border-color: #d97706; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
 .light .tech-tag { color: #1d4ed8; background: rgba(29,78,216,0.08); border-color: rgba(29,78,216,0.15); }
 .light .navbar-glow { background: linear-gradient(90deg, transparent, rgba(217,119,6,0.2), rgba(29,78,216,0.15), transparent); }
 .light ::-webkit-scrollbar-thumb { background: #9ca3af; }
+
+/* Light mode — fix hardcoded dark colors */
+.light .feed-tab { color: #4b5563 !important; }
+.light .feed-tab.active { color: #111827 !important; border-bottom-color: #d97706 !important; }
+.light .sidebar-nav-item { color: #4b5563 !important; }
+.light .sidebar-nav-item:hover { color: #111827 !important; background: #f3f4f6 !important; }
+.light .sidebar-nav-item.active { color: #d97706 !important; background: rgba(217,119,6,0.08) !important; }
+.light .left-sidebar { border-right-color: #d1d5db !important; }
+.light .sidebar-section-label { color: #6b7280 !important; }
 
 /* Instant link transitions */
 a, button {

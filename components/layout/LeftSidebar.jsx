@@ -48,8 +48,8 @@ export default function LeftSidebar() {
           padding: "10px 16px", borderRadius: 8,
           fontFamily: "'JetBrains Mono', monospace",
           fontSize: 14, fontWeight: 500, cursor: "pointer",
-          color: active ? "#e5873a" : "#888888",
-          background: active ? "rgba(229,135,58,0.1)" : "transparent",
+          color: active ? "var(--accent)" : "var(--text-secondary)",
+          background: active ? "var(--accent-glow)" : "transparent",
           transition: "all 0.15s",
         }}>
           {Icon && <Icon style={{ fontSize: 18 }} />}
@@ -60,22 +60,22 @@ export default function LeftSidebar() {
   };
 
   return (
-    <aside className="left-sidebar" style={{ borderRight: "1px solid #2a2a2a" }}>
+    <aside className="left-sidebar" style={{ borderRight: "1px solid var(--border-color)" }}>
       <div style={{ position: "sticky", top: 64, height: "calc(100vh - 64px)", overflowY: "auto", padding: "16px 0" }}>
       <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
         <div>
-          <div style={{ textTransform: "uppercase", fontSize: 11, letterSpacing: "0.08em", color: "#888888", padding: "16px 16px 8px", fontWeight: 600 }}>General</div>
+          <div style={{ textTransform: "uppercase", fontSize: 11, letterSpacing: "0.08em", color: "var(--text-secondary)", padding: "16px 16px 8px", fontWeight: 600 }}>General</div>
           {GENERAL.map((item) => <NavItem key={item.href} item={item} />)}
         </div>
 
         <div style={{ marginTop: 8 }}>
-          <div style={{ textTransform: "uppercase", fontSize: 11, letterSpacing: "0.08em", color: "#888888", padding: "16px 16px 8px", fontWeight: 600 }}>You</div>
+          <div style={{ textTransform: "uppercase", fontSize: 11, letterSpacing: "0.08em", color: "var(--text-secondary)", padding: "16px 16px 8px", fontWeight: 600 }}>You</div>
           {YOU.map((item) => <NavItem key={item.href} item={item} />)}
           {/* Notifications with badge */}
           <Link href="/bookmarks" style={{ textDecoration: "none" }}>
             <div className={`sidebar-nav-item ${pathname === "/notifications" ? "active" : ""}`}>
               <Badge count={unreadCount} size="small" offset={[2, -2]}>
-                <BellOutlined style={{ fontSize: 18, color: pathname === "/notifications" ? "#e5873a" : "#888888" }} />
+                <BellOutlined style={{ fontSize: 18, color: pathname === "/notifications" ? "var(--accent)" : "var(--text-secondary)" }} />
               </Badge>
               <span>Notifications</span>
             </div>
@@ -99,7 +99,7 @@ export default function LeftSidebar() {
           ) : (
             <div style={{ padding: "8px 16px" }}>
               <Link href="/signin">
-                <button style={{ width: "100%", padding: "10px 0", borderRadius: 8, background: "#242424", color: "#e8e8e8", border: "1px solid #2a2a2a", fontWeight: 600, fontSize: 14, cursor: "pointer" }}>
+                <button style={{ width: "100%", padding: "10px 0", borderRadius: 8, background: "var(--bg-surface)", color: "var(--text-primary)", border: "1px solid var(--border-color)", fontWeight: 600, fontSize: 14, cursor: "pointer" }}>
                   Sign In
                 </button>
               </Link>
