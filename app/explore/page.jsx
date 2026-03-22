@@ -26,10 +26,10 @@ export default function ExplorePage() {
         const res = await api.get("/tags");
         if (res.success) {
           const tagList = Array.isArray(res.data) ? res.data : res.data?.tags || res.data?.data || [];
-          setTags(tagList.length > 0 ? tagList : MOCK_TAGS);
+          setTags(tagList);
         }
       } catch {
-        setTags(MOCK_TAGS);
+        setTags([]);
       }
     }
     fetchTags();
@@ -45,10 +45,10 @@ export default function ExplorePage() {
         if (res.success) {
           const tPosts = res.data?.posts || res.data || [];
           const normalized = (Array.isArray(tPosts) ? tPosts : []).map(normalizePost).filter(Boolean);
-          setTrendingPosts(normalized.length > 0 ? normalized : MOCK_TRENDING);
-        } else { setTrendingPosts(MOCK_TRENDING); }
+          setTrendingPosts(normalized);
+        } else { setTrendingPosts([]); }
       } catch {
-        setTrendingPosts(MOCK_TRENDING);
+        setTrendingPosts([]);
       }
       setTrendingLoading(false);
     }
@@ -66,12 +66,12 @@ export default function ExplorePage() {
       if (res.success) {
         const pList = res.data?.posts || res.data || [];
         const normalized = (Array.isArray(pList) ? pList : []).map(normalizePost).filter(Boolean);
-        setPosts(normalized.length > 0 ? normalized : MOCK_POSTS);
+        setPosts(normalized);
       } else {
-        setPosts(MOCK_POSTS);
+        setPosts([]);
       }
     } catch {
-      setPosts(MOCK_POSTS);
+      setPosts([]);
     }
     setLoading(false);
   }, []);
