@@ -363,6 +363,45 @@ main {
   .page-container { padding: 16px !important; }
   .section-padding { padding: 24px 16px !important; }
 
+  /* Comments — responsive */
+  .comment-item { gap: 8px !important; }
+  .comment-item .ant-avatar { width: 28px !important; height: 28px !important; font-size: 12px !important; }
+
+  /* Question detail */
+  .question-detail-wrapper { padding: 24px 12px !important; }
+  .question-detail-wrapper h1 { font-size: 20px !important; }
+  .question-meta { flex-wrap: wrap !important; gap: 6px !important; font-size: 12px !important; }
+
+  /* Discussion detail */
+  .discussion-detail { padding: 24px 12px !important; }
+  .discussion-detail h1 { font-size: 20px !important; }
+
+  /* AI Assistant — full width on mobile */
+  .ai-chat-container { padding: 12px 8px !important; }
+  .ai-chat-container h1 { font-size: 20px !important; }
+
+  /* Tags page grid */
+  .tags-grid { grid-template-columns: 1fr 1fr !important; }
+
+  /* Leaderboard table */
+  .ant-table { font-size: 13px !important; }
+  .ant-table .ant-avatar { width: 28px !important; height: 28px !important; }
+
+  /* Settings page */
+  .settings-container { padding: 24px 12px !important; }
+
+  /* Bookmarks */
+  .bookmarks-container { padding: 24px 12px !important; }
+
+  /* Standalone pages — ensure proper padding */
+  .standalone-page { padding: 24px 12px !important; }
+
+  /* Post detail — smaller cover on mobile */
+  .post-cover { height: 180px !important; border-radius: 12px !important; }
+
+  /* Code blocks — prevent overflow */
+  .prose pre, .tiptap pre { font-size: 12px !important; padding: 12px !important; }
+
   /* Question detail page */
   .question-detail-wrapper { padding: 24px 12px !important; }
   .question-detail-wrapper h1 { font-size: 20px !important; }
@@ -392,6 +431,19 @@ main {
 
   /* Drawer full width on small phones */
   .ant-drawer .ant-drawer-content-wrapper { max-width: 100vw !important; }
+
+  /* Tags grid single column */
+  .tags-grid { grid-template-columns: 1fr !important; }
+
+  /* Feed post — compact */
+  .feed-post { padding: 12px !important; border-radius: 8px !important; }
+  .feed-post-cover { height: 140px !important; }
+
+  /* AI chat messages */
+  .ai-chat-container div[style*="maxWidth: \"80%\""] { max-width: 90% !important; }
+
+  /* Floating AI button — smaller on small phones */
+  .ai-float-btn { width: 44px !important; height: 44px !important; }
 }
 
 /* ═══════════════════════════════════════ */

@@ -27,8 +27,8 @@ export default function AiAssistantPage() {
 
   useEffect(() => {
     if (!isAuthenticated) { router.push("/signin"); return; }
-    // Pre-wake RAG service by hitting a lightweight endpoint
-    api.post('/rag/ask', { question: "ping" }).catch(() => {});
+    // Pre-wake backend (which wakes RAG on first request)
+    api.get('/health').catch(() => {});
   }, []);
 
   // Auto-scroll to bottom

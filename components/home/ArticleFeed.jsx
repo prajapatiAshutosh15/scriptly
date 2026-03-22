@@ -1,55 +1,47 @@
 "use client";
-import { useState, useCallback, useEffect } from "react";
-import { Button, Skeleton } from "antd";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { Skeleton } from "antd";
 import { HeartOutlined, FireOutlined, RocketOutlined } from "@ant-design/icons";
 import FeedPost from "@/components/feed/FeedPost";
 import api from "@/services/api";
 import { normalizePost } from "@/lib/normalizers";
-import { useAuthStore } from "@/stores/authStore";
-import { MOCK_POSTS, USE_MOCK } from "@/lib/mockData";
 
 const TABS = [
-  { key: "following", label: "Following", icon: <HeartOutlined />, sort: "feed" },
+  { key: "feed", label: "Feed", icon: <HeartOutlined />, sort: "latest" },
   { key: "featured", label: "Featured", icon: <FireOutlined />, sort: "popular" },
   { key: "rising", label: "Rising", icon: <RocketOutlined />, sort: "latest" },
 ];
 
 export default function ArticleFeed() {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [posts, setPosts] = useState([]);
-  const [activeTab, setActiveTab] = useState("featured");
+  const [activeTab, setActiveTab] = useState("feed");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const observerRef = useRef(null);
+  const bottomRef = useRef(null);
 
-  const fetchPosts = useCallback(async (tab, pageNum) => {
-    if (USE_MOCK) return { posts: MOCK_POSTS, hasMore: false };
+  const fetchPosts = useCallback(async (sort, pageNum) => {
     try {
-      let endpoint;
-      if (tab === "feed" && isAuthenticated) {
-        endpoint = `/posts/feed?limit=12&page=${pageNum}`;
-      } else {
-        const sort = tab === "feed" ? "latest" : tab;
-        endpoint = `/posts?limit=12&page=${pageNum}&sort=${sort}`;
-      }
-      const res = await api.get(endpoint);
-      if (!res.success) return { posts: MOCK_POSTS, hasMore: false };
+      const res = await api.get(`/posts?limit=10&page=${pageNum}&sort=${sort}`);
       const list = res.data?.posts || res.data || [];
       const normalized = (Array.isArray(list) ? list : []).map(normalizePost).filter(Boolean);
       return {
-        posts: normalized.length > 0 ? normalized : MOCK_POSTS,
+        posts: normalized,
         hasMore: res.data?.pagination?.hasNext || false,
       };
     } catch {
-      return { posts: MOCK_POSTS, hasMore: false };
+      return { posts: [], hasMore: false };
     }
-  }, [isAuthenticated]);
+  }, []);
 
   // Load on mount and tab change
   useEffect(() => {
     setLoading(true);
+    setPosts([]);
     const tab = TABS.find((t) => t.key === activeTab);
-    fetchPosts(tab?.sort || "popular", 1).then((result) => {
+    fetchPosts(tab?.sort || "latest", 1).then((result) => {
       setPosts(result.posts);
       setHasMore(result.hasMore);
       setPage(1);
@@ -57,19 +49,37 @@ export default function ArticleFeed() {
     });
   }, [activeTab, fetchPosts]);
 
-  const loadMore = useCallback(async () => {
-    const nextPage = page + 1;
-    const tab = TABS.find((t) => t.key === activeTab);
-    const result = await fetchPosts(tab?.sort || "popular", nextPage);
-    setPosts((prev) => [...prev, ...result.posts]);
-    setPage(nextPage);
-    setHasMore(result.hasMore);
-  }, [page, activeTab, fetchPosts]);
+  // Infinite scroll — load more when bottom is visible
+  useEffect(() => {
+    if (!hasMore || loading || loadingMore) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !loadingMore) {
+          setLoadingMore(true);
+          const nextPage = page + 1;
+          const tab = TABS.find((t) => t.key === activeTab);
+          fetchPosts(tab?.sort || "latest", nextPage).then((result) => {
+            setPosts((prev) => [...prev, ...result.posts]);
+            setPage(nextPage);
+            setHasMore(result.hasMore);
+            setLoadingMore(false);
+          });
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (bottomRef.current) observer.observe(bottomRef.current);
+    observerRef.current = observer;
+
+    return () => observer.disconnect();
+  }, [hasMore, loading, loadingMore, page, activeTab, fetchPosts]);
 
   return (
     <div>
       {/* Feed Tabs */}
-      <div style={{ display: "flex", gap: 24, borderBottom: "1px solid var(--border-color, #2a2a2a)", marginBottom: 20 }}>
+      <div style={{ display: "flex", gap: 24, borderBottom: "1px solid var(--border-color)", marginBottom: 20 }}>
         {TABS.map((tab) => {
           const isActive = activeTab === tab.key;
           return (
@@ -92,20 +102,10 @@ export default function ArticleFeed() {
       {loading ? (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              style={{
-                background: "var(--card-bg)",
-                borderRadius: 12,
-                border: "1px solid var(--border-color)",
-                padding: 20,
-              }}
-            >
+            <div key={i} style={{ background: "var(--card-bg)", borderRadius: 12, border: "1px solid var(--border-color)", padding: 20 }}>
               <div style={{ display: "flex", gap: 12, marginBottom: 12 }}>
                 <Skeleton.Avatar active size={40} />
-                <div style={{ flex: 1 }}>
-                  <Skeleton active title={{ width: "40%" }} paragraph={{ rows: 0 }} />
-                </div>
+                <div style={{ flex: 1 }}><Skeleton active title={{ width: "40%" }} paragraph={{ rows: 0 }} /></div>
               </div>
               <Skeleton active paragraph={{ rows: 3 }} />
             </div>
@@ -120,30 +120,23 @@ export default function ArticleFeed() {
               ))}
             </div>
           ) : (
-            <div
-              style={{
-                textAlign: "center",
-                padding: "60px 0",
-                color: "var(--text-secondary)",
-              }}
-            >
+            <div style={{ textAlign: "center", padding: "60px 0", color: "var(--text-secondary)" }}>
               <p style={{ fontSize: 18, marginBottom: 8 }}>No posts yet</p>
               <p style={{ fontSize: 14 }}>Be the first to share something!</p>
             </div>
           )}
 
-          {/* Load More */}
-          {hasMore && (
-            <div style={{ textAlign: "center", marginTop: 24 }}>
-              <Button
-                shape="round"
-                onClick={loadMore}
-                style={{ borderColor: "#e5873a", color: "#e5873a" }}
-              >
-                Load More
-              </Button>
+          {/* Infinite scroll trigger */}
+          {loadingMore && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 12 }}>
+              {[1, 2].map((i) => (
+                <div key={i} style={{ background: "var(--card-bg)", borderRadius: 12, border: "1px solid var(--border-color)", padding: 20 }}>
+                  <Skeleton active paragraph={{ rows: 2 }} />
+                </div>
+              ))}
             </div>
           )}
+          <div ref={bottomRef} style={{ height: 1 }} />
         </>
       )}
     </div>
