@@ -30,7 +30,11 @@ export default function SignInPage() {
     setLoading(true);
     try {
       if (isRegisterMode) {
-        await register(form);
+        // Strip @ from username if user typed it
+        const cleanForm = { ...form, username: form.username.replace(/^@/, '').trim() };
+        if (cleanForm.password.length < 8) { message.error("Password must be at least 8 characters"); setLoading(false); return; }
+        if (cleanForm.username.length < 3) { message.error("Username must be at least 3 characters"); setLoading(false); return; }
+        await register(cleanForm);
         message.success("Account created successfully!");
       } else {
         await login(form.email, form.password);
@@ -38,7 +42,8 @@ export default function SignInPage() {
       }
       router.push("/");
     } catch (err) {
-      message.error(err?.error?.message || "Authentication failed");
+      const errorMsg = err?.message || err?.error?.message || err?.error?.details?.username || err?.error?.details?.password || err?.error?.details?.email || "Authentication failed";
+      message.error(typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg));
     } finally {
       setLoading(false);
     }
@@ -105,13 +110,15 @@ export default function SignInPage() {
                 <div>
                   <label style={{ fontSize: 13, fontWeight: 500, display: "block", marginBottom: 6 }}>Username</label>
                   <Input
-                    placeholder="johndoe"
-                    prefix={<UserOutlined />}
+                    placeholder="johndoe (no @, letters/numbers only)"
+                    prefix={<span style={{ color: "var(--text-secondary)" }}>@</span>}
                     size="large"
                     style={{ borderRadius: 12 }}
-                    value={form.username}
-                    onChange={handleChange("username")}
+                    value={form.username.replace(/^@/, '')}
+                    onChange={(e) => setForm(prev => ({ ...prev, username: e.target.value.replace(/[^a-zA-Z0-9_-]/g, '') }))}
                     required
+                    minLength={3}
+                    maxLength={50}
                   />
                 </div>
               </>
@@ -137,14 +144,14 @@ export default function SignInPage() {
                 )}
               </div>
               <Input.Password
-                placeholder={isRegisterMode ? "Create a password (6+ chars)" : "Enter your password"}
+                placeholder={isRegisterMode ? "Min 8 characters" : "Enter your password"}
                 prefix={<LockOutlined />}
                 size="large"
                 style={{ borderRadius: 12 }}
                 value={form.password}
                 onChange={handleChange("password")}
                 required
-                minLength={6}
+                minLength={8}
               />
             </div>
             <Button
