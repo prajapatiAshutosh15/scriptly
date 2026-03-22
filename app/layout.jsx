@@ -4,6 +4,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import ThemeProvider from "@/providers/ThemeProvider";
 import AntdConfigProvider from "@/providers/AntdConfigProvider";
 import Navbar from "@/components/layout/Navbar";
+import AiFloatingButton from "@/components/shared/AiFloatingButton";
 import NavigationProgress from "@/components/NavigationProgress";
 import { SITE_NAME, SITE_DESCRIPTION } from "@/lib/constants";
 
@@ -33,6 +34,7 @@ export default function RootLayout({ children }) {
               </Suspense>
               <Navbar />
               <main style={{ flex: 1 }}>{children}</main>
+              <AiFloatingButton />
             </AntdConfigProvider>
           </ThemeProvider>
         </AntdRegistry>
