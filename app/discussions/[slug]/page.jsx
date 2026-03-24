@@ -9,7 +9,7 @@ import EmptyState from "@/components/shared/EmptyState";
 import { useDiscussions } from "@/hooks/useDiscussions";
 import { useAuthStore } from "@/stores/authStore";
 import { normalizeDiscussion } from "@/lib/normalizers";
-import { formatRelativeTime } from "@/lib/utils";
+import { formatRelativeTime, getDefaultAvatar } from "@/lib/utils";
 import { USE_MOCK, MOCK_DISCUSSION_DETAILS } from "@/lib/mockData";
 
 export default function DiscussionDetailPage() {
@@ -76,7 +76,7 @@ export default function DiscussionDetailPage() {
       {replies.map((reply) => (
         <div key={reply.id} style={{ padding: "16px 0", borderBottom: "1px solid var(--border-color)" }}>
           <div style={{ display: "flex", gap: 12 }}>
-            <Avatar src={reply.author_avatar} size={32} style={{ background: "#2563eb", flexShrink: 0 }}>{reply.author_name?.[0] || "U"}</Avatar>
+            <Avatar src={reply.author_avatar || getDefaultAvatar(reply.author_username)} size={32} style={{ flexShrink: 0 }} />
             <div style={{ flex: 1 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
                 <span style={{ fontWeight: 600, fontSize: 13, color: "var(--text-primary)" }}>{reply.author_name || "Unknown"}</span>

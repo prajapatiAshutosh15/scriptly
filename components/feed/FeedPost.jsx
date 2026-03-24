@@ -7,7 +7,7 @@ import {
   BookOutlined, BookFilled, EllipsisOutlined, CheckCircleFilled,
   ShareAltOutlined, FlagOutlined, LinkOutlined,
 } from "@ant-design/icons";
-import { getRelativeTime, formatNumber } from "@/lib/utils";
+import { getRelativeTime, formatNumber, getDefaultAvatar } from "@/lib/utils";
 import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "next/navigation";
 import api from "@/services/api";
@@ -62,9 +62,7 @@ export default function FeedPost({ post }) {
       {/* Header */}
       <div style={{ display: "flex", gap: 12, alignItems: "center", marginBottom: 12 }}>
         <Link href={`/user/${post.author?.username || ""}`}>
-          <Avatar src={post.author?.avatar} size={40} style={{ background: "#e5873a", flexShrink: 0 }}>
-            {post.author?.name?.[0] || "U"}
-          </Avatar>
+          <Avatar src={post.author?.avatar || getDefaultAvatar(post.author?.username)} size={40} style={{ flexShrink: 0 }} />
         </Link>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>

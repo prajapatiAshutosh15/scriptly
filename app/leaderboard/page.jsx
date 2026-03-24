@@ -5,6 +5,7 @@ import Link from "next/link";
 import ReputationBadge from "@/components/shared/ReputationBadge";
 import api from "@/services/api";
 import { MOCK_USERS, USE_MOCK } from "@/lib/mockData";
+import { getDefaultAvatar } from "@/lib/utils";
 
 export default function LeaderboardPage() {
   const [users, setUsers] = useState([]);
@@ -29,7 +30,7 @@ export default function LeaderboardPage() {
     )},
     { title: "User", key: "user", render: (_, u) => (
       <Link href={`/user/${u.username || ""}`} style={{ display: "flex", alignItems: "center", gap: 12, textDecoration: "none" }}>
-        <Avatar src={u.avatar} size={36} style={{ background: "#2563eb", fontSize: 14, fontWeight: 600 }}>{u.name?.[0] || "U"}</Avatar>
+        <Avatar src={u.avatar || getDefaultAvatar(u.username)} size={36} />
         <div>
           <div style={{ fontWeight: 600, color: "var(--text-primary)", fontSize: 14 }}>{u.name || "Unknown"}</div>
           <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>@{u.username || ""}</div>

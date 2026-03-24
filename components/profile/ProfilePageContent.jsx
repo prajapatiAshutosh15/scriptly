@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import ArticleCard from "@/components/articles/ArticleCard";
 import { useAuthStore } from "@/stores/authStore";
 import api from "@/services/api";
-import { formatDate, formatNumber } from "@/lib/utils";
+import { formatDate, formatNumber, getDefaultAvatar } from "@/lib/utils";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -47,7 +47,7 @@ export default function ProfilePageContent({ author, userPosts }) {
         padding: "64px 24px",
         textAlign: "center",
       }}>
-        <Avatar src={author?.avatar} size={96} style={{ marginBottom: 16, border: "4px solid #fff", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
+        <Avatar src={author?.avatar || getDefaultAvatar(author?.username)} size={96} style={{ marginBottom: 16, border: "4px solid #fff", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}>
           {author?.name?.[0] || "U"}
         </Avatar>
         <Title level={2} style={{ margin: 0 }}>{author?.name || "Unknown"}</Title>

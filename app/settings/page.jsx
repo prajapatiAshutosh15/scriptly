@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Tabs, Input, Button, Card, message, Avatar } from "antd";
 import { useAuthStore } from "@/stores/authStore";
 import { useUser } from "@/hooks/useUser";
+import { getDefaultAvatar } from "@/lib/utils";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function SettingsPage() {
         { key: "profile", label: "Profile", children: (
           <Card style={{ borderRadius: 16 }}>
             <div style={{ textAlign: "center", marginBottom: 24 }}>
-              <Avatar src={user?.avatar} size={80} style={{ background: "#2563eb", fontSize: 32 }}>{user?.name?.[0]}</Avatar>
+              <Avatar src={user?.avatar || getDefaultAvatar(user?.username)} size={80} />
             </div>
             <Field label="Name" field="name" placeholder="Your name" />
             <Field label="Bio" field="bio" placeholder="Tell us about yourself" />

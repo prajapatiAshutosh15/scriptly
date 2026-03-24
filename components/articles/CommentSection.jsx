@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 import { Avatar, Button, Input, Typography, Space, message } from "antd";
 import { HeartOutlined, MessageOutlined } from "@ant-design/icons";
-import { getRelativeTime } from "@/lib/utils";
+import { getRelativeTime, getDefaultAvatar } from "@/lib/utils";
 import api from "@/services/api";
 import { normalizeComment } from "@/lib/normalizers";
 import { useAuthStore } from "@/stores/authStore";
@@ -72,9 +72,7 @@ export default function CommentSection({ postId, comments: initialComments }) {
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         {comments.map((comment) => (
           <div key={comment.id} style={{ display: "flex", gap: 12 }}>
-            <Avatar src={comment.author?.avatar} size={36}>
-              {comment.author?.name?.[0] || "U"}
-            </Avatar>
+            <Avatar src={comment.author?.avatar || getDefaultAvatar(comment.author?.username)} size={36} />
             <div style={{ flex: 1, minWidth: 0 }}>
               <Space size={8} align="center">
                 <Text strong style={{ fontSize: 13 }}>{comment.author?.name || "Unknown"}</Text>

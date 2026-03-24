@@ -8,7 +8,7 @@ import ArticleContent from "./ArticleContent";
 import ReactionBar from "./ReactionBar";
 import CommentSection from "./CommentSection";
 import ArticleCard from "./ArticleCard";
-import { getDefaultCover, formatDate } from "@/lib/utils";
+import { getDefaultCover, formatDate, getDefaultAvatar } from "@/lib/utils";
 import { useAuthStore } from "@/stores/authStore";
 import api from "@/services/api";
 
@@ -114,7 +114,7 @@ export default function PostPageContent({ post, postComments, relatedPosts }) {
             borderBottom: "1px solid var(--border-color)",
           }} className="post-author-section">
             <Link href={`/user/${post.author?.username || ""}`}>
-              <Avatar src={post.author?.avatar} size={56}>{post.author?.name?.[0] || "U"}</Avatar>
+              <Avatar src={post.author?.avatar || getDefaultAvatar(post.author?.username)} size={56} />
             </Link>
             <div style={{ flex: 1 }}>
               <Link href={`/user/${post.author?.username || ""}`} style={{ textDecoration: "none" }}>

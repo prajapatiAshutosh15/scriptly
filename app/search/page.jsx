@@ -9,6 +9,7 @@ import ArticleCard from "@/components/articles/ArticleCard";
 import QuestionCard from "@/components/questions/QuestionCard";
 import EmptyState from "@/components/shared/EmptyState";
 import { normalizePost, normalizeQuestion } from "@/lib/normalizers";
+import { getDefaultAvatar } from "@/lib/utils";
 
 const { Text } = Typography;
 
@@ -110,7 +111,7 @@ function SearchContent() {
                       <Link key={u.id} href={`/user/${u.username || ""}`} style={{ textDecoration: "none" }}>
                         <Card hoverable style={{ borderRadius: 16 }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                            <Avatar src={u.avatar} size={40} style={{ background: "#2563eb" }}>{u.name?.[0] || "U"}</Avatar>
+                            <Avatar src={u.avatar || getDefaultAvatar(u.username)} size={40} />
                             <div>
                               <div style={{ fontWeight: 600, color: "var(--text-primary)" }}>{u.name || "Unknown"}</div>
                               <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>@{u.username || ""} · {u.reputation || 0} rep</div>

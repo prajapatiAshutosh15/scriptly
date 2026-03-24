@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { Tag, Avatar, Space } from "antd";
-import { formatRelativeTime } from "@/lib/utils";
+import { formatRelativeTime, getDefaultAvatar } from "@/lib/utils";
 
 export default function QuestionCard({ question }) {
   const { slug, title, tags, votes, answers, views, isAnswered, author, createdAt } = question;
@@ -36,7 +36,7 @@ export default function QuestionCard({ question }) {
         </Space>
         <div style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 8 }}>
           <Link href={`/user/${author?.username || ""}`} style={{ display: "flex", alignItems: "center", gap: 6, textDecoration: "none" }}>
-            <Avatar src={author?.avatar} size={20} style={{ background: "#2563eb" }}>{author?.name?.[0] || "U"}</Avatar>
+            <Avatar src={author?.avatar || getDefaultAvatar(author?.username)} size={20} />
             <span style={{ fontSize: 12, color: "#2563eb" }}>{author?.name || "Unknown"}</span>
             {author?.reputation && <span style={{ fontSize: 11, color: "var(--text-secondary)" }}>{author.reputation}</span>}
           </Link>

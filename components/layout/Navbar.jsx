@@ -10,6 +10,7 @@ import {
   TagsOutlined, CompassOutlined, BellOutlined, RobotOutlined,
 } from "@ant-design/icons";
 import { SITE_NAME } from "@/lib/constants";
+import { getDefaultAvatar } from "@/lib/utils";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import Logo from "@/components/brand/Logo";
 import NotificationBell from "./NotificationBell";
@@ -111,7 +112,7 @@ export default function Navbar() {
             {isAuthenticated ? (
               <Dropdown menu={{ items: userMenuItems }} placement="bottomRight" trigger={["click"]}>
                 <Avatar
-                  src={user?.avatar}
+                  src={user?.avatar || getDefaultAvatar(user?.username)}
                   style={{
                     cursor: "pointer",
                     background: "#e5873a",
@@ -120,9 +121,7 @@ export default function Navbar() {
                     transition: "all 0.2s ease",
                   }}
                   size={36}
-                >
-                  {user?.name?.[0]?.toUpperCase()}
-                </Avatar>
+                />
               </Dropdown>
             ) : (
               <Link href="/signin" className="hidden-mobile">

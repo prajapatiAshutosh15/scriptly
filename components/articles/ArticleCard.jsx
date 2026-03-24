@@ -3,7 +3,7 @@ import { useState, useCallback } from "react";
 import Link from "next/link";
 import { Card, Avatar, Space, Typography, message, Tooltip } from "antd";
 import { HeartOutlined, HeartFilled, MessageOutlined, ClockCircleOutlined, BookOutlined, BookFilled } from "@ant-design/icons";
-import { getRelativeTime, getDefaultCover } from "@/lib/utils";
+import { getRelativeTime, getDefaultCover, getDefaultAvatar } from "@/lib/utils";
 import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "next/navigation";
 import api from "@/services/api";
@@ -135,9 +135,7 @@ const ArticleCard = ({ post, featured = false }) => {
         borderTop: "1px solid var(--border-color)",
       }}>
         <Link href={`/user/${post.author?.username || ''}`}>
-          <Avatar src={post.author?.avatar} size={34} style={{ background: "#2563eb" }}>
-            {post.author?.name?.[0] || "U"}
-          </Avatar>
+          <Avatar src={post.author?.avatar || getDefaultAvatar(post.author?.username)} size={34} />
         </Link>
         <div style={{ flex: 1, minWidth: 0 }}>
           <Link href={`/user/${post.author?.username || ''}`} style={{ textDecoration: "none" }}>

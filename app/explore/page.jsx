@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { Typography, Tag, Card, Space, Avatar, Spin } from "antd";
 import { FireOutlined, ClockCircleOutlined, HeartOutlined } from "@ant-design/icons";
 import ArticleCard from "@/components/articles/ArticleCard";
-import { formatNumber } from "@/lib/utils";
+import { formatNumber, getDefaultAvatar } from "@/lib/utils";
 import api from "@/services/api";
 import { normalizePost } from "@/lib/normalizers";
 import { MOCK_TAGS, MOCK_TRENDING, MOCK_POSTS, USE_MOCK } from "@/lib/mockData";
@@ -161,7 +161,7 @@ export default function ExplorePage() {
                         {post.title}
                       </Text>
                       <Space size={8} style={{ marginTop: 4 }}>
-                        <Avatar src={post.author?.avatar} size={20}>{post.author?.name?.[0] || "U"}</Avatar>
+                        <Avatar src={post.author?.avatar || getDefaultAvatar(post.author?.username)} size={20} />
                         <Text type="secondary" style={{ fontSize: 12 }}>{post.author?.name || "Unknown"}</Text>
                         <Text type="secondary" style={{ fontSize: 12 }}>
                           <ClockCircleOutlined /> {post.readTime || 1}m
