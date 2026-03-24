@@ -37,7 +37,7 @@ const sections = [
   {
     id: "children",
     title: "7. Children's Privacy",
-    content: `Scriptly is not intended for users under 13 years of age. We do not knowingly collect personal information from children. If we become aware that a child has provided us with personal data, we will take steps to delete such information.`,
+    content: `TLE.ai is not intended for users under 13 years of age. We do not knowingly collect personal information from children. If we become aware that a child has provided us with personal data, we will take steps to delete such information.`,
   },
   {
     id: "changes",
@@ -47,7 +47,7 @@ const sections = [
   {
     id: "contact",
     title: "9. Contact Us",
-    content: `If you have questions about this privacy policy or our data practices, please contact us at privacy@scriptly.dev or write to: Scriptly Privacy Team, 123 Developer Ave, San Francisco, CA 94102.`,
+    content: `If you have questions about this privacy policy or our data practices, please contact us at privacy@tle.ai or write to: TLE.ai Privacy Team.`,
   },
 ];
 
@@ -67,7 +67,7 @@ export default function PrivacyPage() {
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "60px 24px" }}>
         <Paragraph style={{ fontSize: 16, lineHeight: 1.8, marginBottom: 40 }}>
-          At Scriptly, we take your privacy seriously. This policy describes how we collect, use, and protect your personal information when you use our platform.
+          At TLE.ai, we take your privacy seriously. This policy describes how we collect, use, and protect your personal information when you use our platform.
         </Paragraph>
 
         <Row gutter={[48, 0]}>

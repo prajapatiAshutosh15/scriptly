@@ -31,7 +31,7 @@ export default function AboutPage() {
         textAlign: "center",
       }}>
         <Title level={1} style={{ margin: 0, fontSize: 44, fontWeight: 800 }}>
-          About Scriptly
+          About TLE.ai
         </Title>
         <Paragraph style={{ fontSize: 18, maxWidth: 600, margin: "16px auto 0" }} type="secondary">
           We&apos;re building the home for developer content on the internet — a place where ideas thrive and knowledge flows freely.
@@ -44,10 +44,10 @@ export default function AboutPage() {
           <Col xs={24} md={12}>
             <Title level={2}>Our Mission</Title>
             <Paragraph style={{ fontSize: 16, lineHeight: 1.8 }}>
-              Scriptly was founded in 2024 with a simple mission: give every developer a voice. We believe that writing makes you a better thinker, and sharing makes the entire community stronger.
+              TLE.ai was founded in 2024 with a simple mission: give every developer a voice. We believe that writing makes you a better thinker, and sharing makes the entire community stronger.
             </Paragraph>
             <Paragraph style={{ fontSize: 16, lineHeight: 1.8 }}>
-              Our growing community of developers uses Scriptly to publish articles, ask and answer technical questions, and build their personal brand. We're just getting started, and every new voice makes the community stronger.
+              Our growing community of developers uses TLE.ai to publish articles, ask and answer technical questions, and build their personal brand. We're just getting started, and every new voice makes the community stronger.
             </Paragraph>
           </Col>
           <Col xs={24} md={12}>
@@ -102,7 +102,7 @@ export default function AboutPage() {
         {/* Team */}
         <div style={{ textAlign: "center", marginBottom: 40 }}>
           <Title level={2}><TeamOutlined /> Meet the Team</Title>
-          <Text type="secondary" style={{ fontSize: 16 }}>The people building Scriptly</Text>
+          <Text type="secondary" style={{ fontSize: 16 }}>The people building TLE.ai</Text>
         </div>
         <Row gutter={[24, 24]}>
           {team.map((member, i) => (
@@ -127,7 +127,7 @@ export default function AboutPage() {
         }}>
           <Title level={3} style={{ color: "#fff", margin: 0 }}>Ready to start writing?</Title>
           <Paragraph style={{ color: "rgba(219,234,254,0.85)", marginTop: 8 }}>
-            Join a growing community of developers sharing their knowledge on Scriptly.
+            Join a growing community of developers sharing their knowledge on TLE.ai.
           </Paragraph>
           <Link href="/write">
             <button style={{

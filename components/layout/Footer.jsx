@@ -13,7 +13,7 @@ export default function Footer() {
       fontSize: 12,
       color: "var(--text-secondary)",
     }}>
-      <span>&copy; 2026 Scriptly</span>
+      <span>&copy; 2026 TLE.ai</span>
       <div style={{ display: "flex", gap: 16 }}>
         <Link href="/privacy" style={{ textDecoration: "none", color: "var(--text-secondary)", transition: "color 0.2s" }}>Privacy</Link>
         <span>&middot;</span>

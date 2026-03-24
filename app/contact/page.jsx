@@ -73,7 +73,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <Text strong>Email</Text>
-                    <div><Text type="secondary" style={{ fontSize: 13 }}>support@scriptly.dev</Text></div>
+                    <div><Text type="secondary" style={{ fontSize: 13 }}>support@tle.ai</Text></div>
                   </div>
                 </Space>
               </Card>

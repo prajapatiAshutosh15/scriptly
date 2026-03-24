@@ -74,7 +74,7 @@ export default function SignInPage() {
             {isRegisterMode ? "Create your account" : "Welcome back"}
           </Title>
           <Text type="secondary">
-            {isRegisterMode ? "Join the Scriptly community" : "Sign in to continue to Scriptly"}
+            {isRegisterMode ? "Join the TLE.ai community" : "Sign in to continue to TLE.ai"}
           </Text>
         </div>
 

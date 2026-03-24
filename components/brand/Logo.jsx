@@ -58,7 +58,7 @@ export default function Logo({ size = 36, showText = true, textSize = 20 }) {
           letterSpacing: "-0.02em",
           lineHeight: 1,
         }}>
-          script<span style={{ color: "#e5873a" }}>ly</span>
+          TLE<span style={{ color: "#e5873a" }}>.ai</span>
         </span>
       )}
     </div>

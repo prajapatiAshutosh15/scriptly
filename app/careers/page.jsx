@@ -85,7 +85,7 @@ export default function CareersPage() {
       <div style={{ maxWidth: 1000, margin: "0 auto", padding: "60px 24px" }}>
         {/* Perks */}
         <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <Title level={2}><HeartOutlined /> Why Scriptly?</Title>
+          <Title level={2}><HeartOutlined /> Why TLE.ai?</Title>
           <Text type="secondary" style={{ fontSize: 16 }}>Benefits that matter</Text>
         </div>
         <Row gutter={[16, 16]} style={{ marginBottom: 60 }}>

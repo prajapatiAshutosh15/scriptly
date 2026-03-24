@@ -7,17 +7,17 @@ const sections = [
   {
     id: "acceptance",
     title: "1. Acceptance of Terms",
-    content: `By accessing or using Scriptly, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our platform. We reserve the right to modify these terms at any time, and your continued use constitutes acceptance of modified terms.`,
+    content: `By accessing or using TLE.ai, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our platform. We reserve the right to modify these terms at any time, and your continued use constitutes acceptance of modified terms.`,
   },
   {
     id: "accounts",
     title: "2. User Accounts",
-    content: `You must provide accurate information when creating an account. You are responsible for maintaining the security of your account and password. You must be at least 13 years old to use Scriptly. One person or entity may not maintain more than one free account.`,
+    content: `You must provide accurate information when creating an account. You are responsible for maintaining the security of your account and password. You must be at least 13 years old to use TLE.ai. One person or entity may not maintain more than one free account.`,
   },
   {
     id: "content",
     title: "3. User Content",
-    content: `You retain ownership of all content you publish on Scriptly. By publishing, you grant Scriptly a non-exclusive license to display, distribute, and promote your content on our platform. You are responsible for ensuring your content does not violate any laws or third-party rights.`,
+    content: `You retain ownership of all content you publish on TLE.ai. By publishing, you grant TLE.ai a non-exclusive license to display, distribute, and promote your content on our platform. You are responsible for ensuring your content does not violate any laws or third-party rights.`,
   },
   {
     id: "prohibited",
@@ -27,7 +27,7 @@ const sections = [
   {
     id: "intellectual-property",
     title: "5. Intellectual Property",
-    content: `Scriptly and its original content, features, and functionality are owned by Scriptly Inc. Our trademarks and trade dress may not be used in connection with any product or service without prior written consent. You may not copy, modify, or reverse engineer any part of our platform.`,
+    content: `TLE.ai and its original content, features, and functionality are owned by TLE.ai Inc. Our trademarks and trade dress may not be used in connection with any product or service without prior written consent. You may not copy, modify, or reverse engineer any part of our platform.`,
   },
   {
     id: "payments",
@@ -42,7 +42,7 @@ const sections = [
   {
     id: "limitation",
     title: "8. Limitation of Liability",
-    content: `Scriptly is provided "as is" without warranties of any kind. We shall not be liable for any indirect, incidental, or consequential damages. Our total liability shall not exceed the amount you paid us in the 12 months preceding the claim.`,
+    content: `TLE.ai is provided "as is" without warranties of any kind. We shall not be liable for any indirect, incidental, or consequential damages. Our total liability shall not exceed the amount you paid us in the 12 months preceding the claim.`,
   },
   {
     id: "governing-law",
@@ -67,7 +67,7 @@ export default function TermsPage() {
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "60px 24px" }}>
         <Paragraph style={{ fontSize: 16, lineHeight: 1.8, marginBottom: 40 }}>
-          Welcome to Scriptly. Please read these terms carefully before using our platform. These terms govern your use of Scriptly and all associated services.
+          Welcome to TLE.ai. Please read these terms carefully before using our platform. These terms govern your use of TLE.ai and all associated services.
         </Paragraph>
 
         <Row gutter={[48, 0]}>
