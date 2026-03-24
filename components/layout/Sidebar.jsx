@@ -1,9 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { Button, Skeleton } from "antd";
-import { FireOutlined } from "@ant-design/icons";
+import { useRouter } from "next/navigation";
+import { Button, Skeleton, message } from "antd";
+import { FireOutlined, CheckOutlined } from "@ant-design/icons";
 import api from "@/services/api";
+import { useAuthStore } from "@/stores/authStore";
 import { MOCK_TAGS, MOCK_FEATURED, USE_MOCK } from "@/lib/mockData";
 
 export default function Sidebar() {
@@ -52,6 +54,26 @@ export default function Sidebar() {
     }
     loadData();
   }, []);
+
+  const router = useRouter();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const [followedTags, setFollowedTags] = useState({});
+
+  const handleFollowTag = useCallback(async (slug) => {
+    if (!isAuthenticated) { router.push("/signin"); return; }
+    const isFollowing = followedTags[slug];
+    setFollowedTags((prev) => ({ ...prev, [slug]: !isFollowing }));
+    try {
+      if (isFollowing) {
+        await api.delete(`/tags/${slug}/follow`);
+      } else {
+        await api.post(`/tags/${slug}/follow`);
+      }
+    } catch {
+      setFollowedTags((prev) => ({ ...prev, [slug]: isFollowing }));
+      message.error("Failed");
+    }
+  }, [followedTags, isAuthenticated, router]);
 
   const suggestedTags = tags.slice(0, 6);
 
@@ -205,14 +227,17 @@ export default function Sidebar() {
                 <Button
                   size="small"
                   shape="round"
+                  icon={followedTags[tag.slug] ? <CheckOutlined /> : null}
+                  onClick={() => handleFollowTag(tag.slug)}
+                  type={followedTags[tag.slug] ? "default" : "default"}
                   style={{
-                    borderColor: "#e5873a",
-                    color: "#e5873a",
+                    borderColor: followedTags[tag.slug] ? "#22c55e" : "#e5873a",
+                    color: followedTags[tag.slug] ? "#22c55e" : "#e5873a",
                     fontSize: 12,
                     height: 28,
                   }}
                 >
-                  Follow
+                  {followedTags[tag.slug] ? "Following" : "Follow"}
                 </Button>
               </div>
             ))}
