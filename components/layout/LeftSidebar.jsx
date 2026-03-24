@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import { useAuthStore } from "@/stores/authStore";
 import { useNotificationStore } from "@/stores/notificationStore";
+import { getDefaultAvatar } from "@/lib/utils";
 
 const ICON_MAP = {
   HomeOutlined, QuestionCircleOutlined, MessageOutlined,
@@ -72,7 +73,7 @@ export default function LeftSidebar() {
           <div style={{ textTransform: "uppercase", fontSize: 11, letterSpacing: "0.08em", color: "var(--text-secondary)", padding: "16px 16px 8px", fontWeight: 600 }}>You</div>
           {YOU.map((item) => <NavItem key={item.href} item={item} />)}
           {/* Notifications with badge */}
-          <Link href="/bookmarks" style={{ textDecoration: "none" }}>
+          <Link href="/notifications" style={{ textDecoration: "none" }}>
             <div className={`sidebar-nav-item ${pathname === "/notifications" ? "active" : ""}`}>
               <Badge count={unreadCount} size="small" offset={[2, -2]}>
                 <BellOutlined style={{ fontSize: 18, color: pathname === "/notifications" ? "var(--accent)" : "var(--text-secondary)" }} />
@@ -87,9 +88,7 @@ export default function LeftSidebar() {
           {isAuthenticated && user ? (
             <Link href={`/user/${user.username}`} style={{ textDecoration: "none" }}>
               <div className="sidebar-user">
-                <Avatar src={user.avatar} size={36} style={{ background: "#e5873a", flexShrink: 0 }}>
-                  {user.name?.[0]}
-                </Avatar>
+                <Avatar src={user.avatar || getDefaultAvatar(user.username)} size={36} style={{ flexShrink: 0 }} />
                 <div style={{ minWidth: 0 }}>
                   <div style={{ fontWeight: 600, fontSize: 14, color: "var(--text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user.name}</div>
                   <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>@{user.username}</div>

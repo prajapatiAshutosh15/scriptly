@@ -75,6 +75,18 @@ export default function Sidebar() {
     }
   }, [followedTags, isAuthenticated, router]);
 
+  // Fetch user's followed tags on mount
+  useEffect(() => {
+    if (isAuthenticated) {
+      api.get("/tags/following").then((res) => {
+        const slugs = res.data?.slugs || [];
+        const map = {};
+        slugs.forEach((s) => { map[s] = true; });
+        setFollowedTags(map);
+      }).catch(() => {});
+    }
+  }, [isAuthenticated]);
+
   const suggestedTags = tags.slice(0, 6);
 
   return (
