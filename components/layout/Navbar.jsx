@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { Input, Space, Drawer, Avatar, Dropdown, message } from "antd";
 import {
   SearchOutlined, MenuOutlined, UserOutlined, LogoutOutlined,
-  BookOutlined, SettingOutlined, TrophyOutlined, EditOutlined,
+  BookOutlined, SettingOutlined, EditOutlined,
   HomeOutlined, QuestionCircleOutlined, MessageOutlined,
   TagsOutlined, CompassOutlined, BellOutlined, RobotOutlined,
 } from "@ant-design/icons";
@@ -64,8 +64,7 @@ export default function Navbar() {
   const userMenuItems = [
     { key: "profile", icon: <UserOutlined />, label: <Link href={`/user/${user?.username}`}>My Profile</Link> },
     { key: "bookmarks", icon: <BookOutlined />, label: <Link href="/bookmarks">Bookmarks</Link> },
-    { key: "drafts", icon: <EditOutlined />, label: <Link href="/write">My Drafts</Link> },
-    { key: "leaderboard", icon: <TrophyOutlined />, label: <Link href="/leaderboard">Leaderboard</Link> },
+    { key: "drafts", icon: <EditOutlined />, label: <Link href="/drafts">My Drafts</Link> },
     { key: "settings", icon: <SettingOutlined />, label: <Link href="/settings">Settings</Link> },
     { type: "divider" },
     { key: "logout", icon: <LogoutOutlined />, label: "Sign Out", danger: true, onClick: handleLogout },
