@@ -102,6 +102,20 @@ body {
 .light .left-sidebar { border-right-color: #d1d5db !important; }
 .light .sidebar-section-label { color: #6b7280 !important; }
 
+/* Light mode — code blocks stay dark for readability */
+.light .prose pre, .light .tiptap pre {
+  background: #1e293b !important;
+  color: #e2e8f0 !important;
+}
+.light .prose code, .light .tiptap code {
+  background: rgba(0,0,0,0.06);
+  color: #d97706;
+}
+.light .prose pre code, .light .tiptap pre code {
+  background: none !important;
+  color: #e2e8f0 !important;
+}
+
 /* Instant link transitions */
 a, button {
   -webkit-tap-highlight-color: transparent;

@@ -13,7 +13,7 @@ import { SITE_NAME } from "@/lib/constants";
 import { getDefaultAvatar } from "@/lib/utils";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import Logo from "@/components/brand/Logo";
-import NotificationBell from "./NotificationBell";
+// import NotificationBell from "./NotificationBell";
 import { useAuthStore } from "@/stores/authStore";
 
 const SIDEBAR_NAV = [
@@ -24,7 +24,6 @@ const SIDEBAR_NAV = [
   { label: "Explore", href: "/explore", icon: <CompassOutlined /> },
   { label: "AI Assistant", href: "/ai-assistant", icon: <RobotOutlined /> },
   { label: "Bookmarks", href: "/bookmarks", icon: <BookOutlined /> },
-  { label: "Notifications", href: "/notifications", icon: <BellOutlined /> },
   { label: "Settings", href: "/settings", icon: <SettingOutlined /> },
 ];
 
@@ -118,7 +117,7 @@ export default function Navbar() {
           {/* Actions */}
           <Space size={8} style={{ flexShrink: 0 }}>
             <ThemeToggle />
-            <NotificationBell />
+            {/* <NotificationBell /> */}
 
             {isAuthenticated ? (
               <Dropdown menu={{ items: userMenuItems }} placement="bottomRight" trigger={["click"]}>

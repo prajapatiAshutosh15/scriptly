@@ -1,20 +1,19 @@
 "use client";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { Avatar, Badge } from "antd";
+import { Avatar } from "antd";
 import {
   HomeOutlined, QuestionCircleOutlined, MessageOutlined,
   TagsOutlined, CompassOutlined, BookOutlined,
-  BellOutlined, SettingOutlined, RobotOutlined,
+  SettingOutlined, RobotOutlined,
 } from "@ant-design/icons";
 import { useAuthStore } from "@/stores/authStore";
-import { useNotificationStore } from "@/stores/notificationStore";
 import { getDefaultAvatar } from "@/lib/utils";
 
 const ICON_MAP = {
   HomeOutlined, QuestionCircleOutlined, MessageOutlined,
   TagsOutlined, CompassOutlined, BookOutlined,
-  BellOutlined, SettingOutlined, RobotOutlined,
+  SettingOutlined, RobotOutlined,
 };
 
 const GENERAL = [
@@ -35,7 +34,6 @@ export default function LeftSidebar() {
   const pathname = usePathname();
   const user = useAuthStore((s) => s.user);
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const unreadCount = useNotificationStore((s) => s.unreadCount);
 
   const isActive = (href) => href === "/" ? pathname === "/" : pathname.startsWith(href);
 
@@ -72,15 +70,6 @@ export default function LeftSidebar() {
         <div style={{ marginTop: 8 }}>
           <div style={{ textTransform: "uppercase", fontSize: 11, letterSpacing: "0.08em", color: "var(--text-secondary)", padding: "16px 16px 8px", fontWeight: 600 }}>You</div>
           {YOU.map((item) => <NavItem key={item.href} item={item} />)}
-          {/* Notifications with badge */}
-          <Link href="/notifications" style={{ textDecoration: "none" }}>
-            <div className={`sidebar-nav-item ${pathname === "/notifications" ? "active" : ""}`}>
-              <Badge count={unreadCount} size="small" offset={[2, -2]}>
-                <BellOutlined style={{ fontSize: 18, color: pathname === "/notifications" ? "var(--accent)" : "var(--text-secondary)" }} />
-              </Badge>
-              <span>Notifications</span>
-            </div>
-          </Link>
         </div>
 
         {/* User profile at bottom */}
