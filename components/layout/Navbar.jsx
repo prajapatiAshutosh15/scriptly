@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Input, Space, Drawer, Avatar, Dropdown, message } from "antd";
@@ -42,6 +42,18 @@ export default function Navbar() {
   const handleSearch = (value) => {
     if (value.trim()) router.push(`/search?q=${encodeURIComponent(value.trim())}`);
   };
+
+  // Ctrl+K → open AI Assistant
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        router.push("/ai-assistant");
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [router]);
 
   const handleLogout = () => {
     logout();

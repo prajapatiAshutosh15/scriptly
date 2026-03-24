@@ -26,7 +26,6 @@ export default function AiAssistantPage() {
   const bottomRef = useRef(null);
 
   useEffect(() => {
-    if (!isAuthenticated) { router.push("/signin"); return; }
     // Pre-wake backend (which wakes RAG on first request)
     api.get('/health').catch(() => {});
   }, []);
