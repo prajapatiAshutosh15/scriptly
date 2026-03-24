@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { Avatar } from "antd";
 import { CodeOutlined, FileImageOutlined, QuestionCircleOutlined, SendOutlined } from "@ant-design/icons";
 import { useAuthStore } from "@/stores/authStore";
+import { getDefaultAvatar } from "@/lib/utils";
 
 export default function PostComposer() {
   const router = useRouter();
@@ -21,9 +22,7 @@ export default function PostComposer() {
       padding: 16,
     }}>
       <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-        <Avatar src={user?.avatar} size={40} style={{ background: "#e5873a", flexShrink: 0 }}>
-          {user?.name?.[0] || "?"}
-        </Avatar>
+        <Avatar src={user?.avatar || getDefaultAvatar(user?.username)} size={40} style={{ flexShrink: 0 }} />
         <div
           onClick={() => handleAction("/write")}
           style={{
