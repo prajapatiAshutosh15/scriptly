@@ -5,11 +5,12 @@ import { HeartOutlined, FireOutlined, RocketOutlined } from "@ant-design/icons";
 import FeedPost from "@/components/feed/FeedPost";
 import api from "@/services/api";
 import { normalizePost } from "@/lib/normalizers";
+import { useAuthStore } from "@/stores/authStore";
 
 const TABS = [
-  { key: "feed", label: "Feed", icon: <HeartOutlined />, sort: "latest" },
-  { key: "featured", label: "Featured", icon: <FireOutlined />, sort: "popular" },
-  { key: "rising", label: "Rising", icon: <RocketOutlined />, sort: "latest" },
+  { key: "feed", label: "Feed", icon: <HeartOutlined />, sort: "latest", endpoint: "/posts" },
+  { key: "featured", label: "Featured", icon: <FireOutlined />, sort: "feed", endpoint: "/posts/feed" },
+  { key: "rising", label: "Rising", icon: <RocketOutlined />, sort: "rising", endpoint: "/posts" },
 ];
 
 export default function ArticleFeed() {
@@ -22,9 +23,18 @@ export default function ArticleFeed() {
   const observerRef = useRef(null);
   const bottomRef = useRef(null);
 
-  const fetchPosts = useCallback(async (sort, pageNum) => {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+
+  const fetchPosts = useCallback(async (tab, pageNum) => {
     try {
-      const res = await api.get(`/posts?limit=10&page=${pageNum}&sort=${sort}`);
+      // Featured (feed) requires auth — fall back to popular for logged-out users
+      let endpoint = tab.endpoint;
+      let sort = tab.sort;
+      if (tab.key === "featured" && !isAuthenticated) {
+        endpoint = "/posts";
+        sort = "popular";
+      }
+      const res = await api.get(`${endpoint}?limit=10&page=${pageNum}&sort=${sort}`);
       const list = res.data?.posts || res.data || [];
       const normalized = (Array.isArray(list) ? list : []).map(normalizePost).filter(Boolean);
       return {
@@ -34,14 +44,14 @@ export default function ArticleFeed() {
     } catch {
       return { posts: [], hasMore: false };
     }
-  }, []);
+  }, [isAuthenticated]);
 
   // Load on mount and tab change
   useEffect(() => {
     setLoading(true);
     setPosts([]);
-    const tab = TABS.find((t) => t.key === activeTab);
-    fetchPosts(tab?.sort || "latest", 1).then((result) => {
+    const tab = TABS.find((t) => t.key === activeTab) || TABS[0];
+    fetchPosts(tab, 1).then((result) => {
       setPosts(result.posts);
       setHasMore(result.hasMore);
       setPage(1);
@@ -58,8 +68,8 @@ export default function ArticleFeed() {
         if (entries[0].isIntersecting && hasMore && !loadingMore) {
           setLoadingMore(true);
           const nextPage = page + 1;
-          const tab = TABS.find((t) => t.key === activeTab);
-          fetchPosts(tab?.sort || "latest", nextPage).then((result) => {
+          const tab = TABS.find((t) => t.key === activeTab) || TABS[0];
+          fetchPosts(tab, nextPage).then((result) => {
             setPosts((prev) => [...prev, ...result.posts]);
             setPage(nextPage);
             setHasMore(result.hasMore);
