@@ -24,19 +24,24 @@ export default function QuestionsPage() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  useEffect(() => { if (USE_MOCK) { setTags(MOCK_TAGS_DATA); return; } fetchTags().then((data) => { const t = data?.tags || []; setTags(t.length > 0 ? t : MOCK_TAGS_DATA); }).catch(() => setTags(MOCK_TAGS_DATA)); }, []);
+  useEffect(() => {
+    if (USE_MOCK) { setTags(MOCK_TAGS_DATA); return; }
+    fetchTags().then((data) => setTags(data?.tags || [])).catch(() => setTags([]));
+  }, []);
   useEffect(() => { loadQuestions(true); }, [sort, selectedTag]);
 
   const loadQuestions = async (reset = false) => {
     if (USE_MOCK) { setQuestions(MOCK_QUESTIONS); setHasMore(false); return; }
     const p = reset ? 1 : page;
-    let data;
-    try { data = await fetchQuestions({ page: p, limit: 20, sort, tag: selectedTag || undefined }); } catch { data = null; }
-    const list = data?.questions || [];
-    const finalList = list.length > 0 ? list : (reset ? MOCK_QUESTIONS : []);
-    setQuestions(reset ? finalList : [...questions, ...finalList]);
-    setHasMore(data?.pagination?.hasNext || false);
-    setPage(reset ? 2 : p + 1);
+    try {
+      const data = await fetchQuestions({ page: p, limit: 20, sort, tag: selectedTag || undefined });
+      const list = data?.questions || [];
+      setQuestions(reset ? list : [...questions, ...list]);
+      setHasMore(data?.pagination?.hasNext || false);
+      setPage(reset ? 2 : p + 1);
+    } catch {
+      if (reset) setQuestions([]);
+    }
   };
 
   return (

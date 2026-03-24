@@ -20,16 +20,23 @@ export default function DiscussionsPage() {
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState("all");
 
-  useEffect(() => { if (USE_MOCK) { setCategories(MOCK_CATEGORIES); } else { fetchCategories().then((d) => { const cats = d?.categories || []; setCategories(cats.length > 0 ? cats : MOCK_CATEGORIES); }).catch(() => setCategories(MOCK_CATEGORIES)); } loadDiscussions(); }, []);
+  useEffect(() => {
+    if (USE_MOCK) { setCategories(MOCK_CATEGORIES); } else {
+      fetchCategories().then((d) => setCategories(d?.categories || [])).catch(() => setCategories([]));
+    }
+    loadDiscussions();
+  }, []);
   useEffect(() => { loadDiscussions(); }, [activeCategory]);
 
   const loadDiscussions = async () => {
     if (USE_MOCK) { setDiscussions(MOCK_DISCUSSIONS); return; }
     const params = activeCategory !== "all" ? { category: activeCategory } : {};
-    let data;
-    try { data = await fetchDiscussions(params); } catch { data = null; }
-    const list = (data?.discussions || []).map(normalizeDiscussion);
-    setDiscussions(list.length > 0 ? list : MOCK_DISCUSSIONS);
+    try {
+      const data = await fetchDiscussions(params);
+      setDiscussions((data?.discussions || []).map(normalizeDiscussion));
+    } catch {
+      setDiscussions([]);
+    }
   };
 
   return (

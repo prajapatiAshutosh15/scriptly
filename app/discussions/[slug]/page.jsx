@@ -26,21 +26,12 @@ export default function DiscussionDetailPage() {
 
   const loadDiscussion = async () => {
     setLoading(true);
-    if (USE_MOCK) {
-      const mockD = MOCK_DISCUSSION_DETAILS[slug] || Object.values(MOCK_DISCUSSION_DETAILS)[0];
-      if (mockD) {
-        setDiscussion(normalizeDiscussion(mockD));
-        setReplies(mockD.replies || []);
-      }
-      setLoading(false);
-      return;
-    }
     try {
       const data = await fetchBySlug(slug);
       const d = data?.discussion;
       setDiscussion(normalizeDiscussion(d));
       setReplies(d?.replies || []);
-    } catch { message.error("Failed to load"); }
+    } catch { message.error("Failed to load discussion"); }
     finally { setLoading(false); }
   };
 

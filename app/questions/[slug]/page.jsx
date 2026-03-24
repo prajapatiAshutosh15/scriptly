@@ -34,15 +34,6 @@ export default function QuestionDetailPage() {
 
   const loadQuestion = async () => {
     setLoading(true);
-    if (USE_MOCK) {
-      const mockQ = MOCK_QUESTION_DETAILS[slug] || Object.values(MOCK_QUESTION_DETAILS)[0];
-      if (mockQ) {
-        setQuestion(normalizeQuestion(mockQ));
-        setAnswers((mockQ.answers || []).map(normalizeAnswer));
-      }
-      setLoading(false);
-      return;
-    }
     try {
       const data = await fetchBySlug(slug);
       const q = data.question;
