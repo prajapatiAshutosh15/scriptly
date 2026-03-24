@@ -1,13 +1,44 @@
 "use client";
+import { useState, useCallback } from "react";
 import Link from "next/link";
-import { Avatar, Button, Typography, Space, Divider } from "antd";
-import { EnvironmentOutlined, CalendarOutlined, UserAddOutlined } from "@ant-design/icons";
+import { Avatar, Button, Typography, Space, Divider, message } from "antd";
+import { EnvironmentOutlined, CalendarOutlined, UserAddOutlined, UserDeleteOutlined } from "@ant-design/icons";
+import { useRouter } from "next/navigation";
 import ArticleCard from "@/components/articles/ArticleCard";
+import { useAuthStore } from "@/stores/authStore";
+import api from "@/services/api";
 import { formatDate, formatNumber } from "@/lib/utils";
 
 const { Title, Text, Paragraph } = Typography;
 
 export default function ProfilePageContent({ author, userPosts }) {
+  const router = useRouter();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const currentUser = useAuthStore((s) => s.user);
+  const [following, setFollowing] = useState(author?.isFollowing || false);
+  const [followersCount, setFollowersCount] = useState(author?.followers || 0);
+  const [followLoading, setFollowLoading] = useState(false);
+  const isOwnProfile = currentUser?.username === author?.username;
+
+  const handleFollow = useCallback(async () => {
+    if (!isAuthenticated) { router.push("/signin"); return; }
+    setFollowLoading(true);
+    try {
+      if (following) {
+        await api.delete(`/users/${author.username}/follow`);
+        setFollowing(false);
+        setFollowersCount((c) => Math.max(0, c - 1));
+      } else {
+        await api.post(`/users/${author.username}/follow`);
+        setFollowing(true);
+        setFollowersCount((c) => c + 1);
+      }
+    } catch {
+      message.error("Failed");
+    } finally {
+      setFollowLoading(false);
+    }
+  }, [following, author?.username, isAuthenticated, router]);
   return (
     <div>
       {/* Profile Header */}
@@ -28,7 +59,7 @@ export default function ProfilePageContent({ author, userPosts }) {
         <Space size={32} style={{ marginTop: 24 }}>
           {[
             { value: author?.postsCount || userPosts?.length || 0, label: "Posts" },
-            { value: formatNumber(author?.followers || 0), label: "Followers" },
+            { value: formatNumber(followersCount), label: "Followers" },
             { value: formatNumber(author?.following || 0), label: "Following" },
           ].map((stat, i) => (
             <div key={i} style={{ textAlign: "center" }}>
@@ -39,9 +70,18 @@ export default function ProfilePageContent({ author, userPosts }) {
         </Space>
 
         <div style={{ marginTop: 24, display: "flex", alignItems: "center", justifyContent: "center", gap: 16, flexWrap: "wrap" }}>
-          <Button type="primary" shape="round" icon={<UserAddOutlined />} size="large">
-            Follow
-          </Button>
+          {!isOwnProfile && (
+            <Button
+              type={following ? "default" : "primary"}
+              shape="round"
+              icon={following ? <UserDeleteOutlined /> : <UserAddOutlined />}
+              size="large"
+              loading={followLoading}
+              onClick={handleFollow}
+            >
+              {following ? "Unfollow" : "Follow"}
+            </Button>
+          )}
           <Space size={8}>
             <Text type="secondary" style={{ fontSize: 13 }}>
               <EnvironmentOutlined /> {author?.location || ""}

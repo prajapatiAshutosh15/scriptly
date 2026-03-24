@@ -40,11 +40,11 @@ const ArticleCard = ({ post, featured = false }) => {
     if (!isAuthenticated) { router.push("/signin"); return; }
     try {
       if (bookmarked) {
-        await api.delete(`/posts/${post.slug}/bookmark`);
+        await api.delete(`/bookmarks/post/${post.id}`);
         setBookmarked(false);
         message.success("Removed from bookmarks");
       } else {
-        await api.post(`/posts/${post.slug}/bookmark`);
+        await api.post(`/bookmarks/post/${post.id}`);
         setBookmarked(true);
         message.success("Bookmarked!");
       }
