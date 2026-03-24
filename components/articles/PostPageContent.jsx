@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Card, Tag, Avatar, Typography, Space, Divider, Button, Popconfirm, message } from "antd";
@@ -19,6 +19,13 @@ export default function PostPageContent({ post, postComments, relatedPosts }) {
   const currentUser = useAuthStore((s) => s.user);
   const isAuthor = currentUser?.id === post.author?.id || currentUser?.username === post.author?.username;
   const [deleting, setDeleting] = useState(false);
+
+  // Record view on mount
+  useEffect(() => {
+    if (post?.slug) {
+      api.post(`/posts/${post.slug}/views`).catch(() => {});
+    }
+  }, [post?.slug]);
 
   const handleDelete = useCallback(async () => {
     setDeleting(true);
