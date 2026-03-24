@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { CheckCircleFilled } from "@ant-design/icons";
+import { CaretUpFilled, CaretDownFilled, CheckCircleFilled } from "@ant-design/icons";
 
 export default function VoteButtons({ votes = 0, userVote = null, isAccepted = false, onVote, onAccept, showAccept = false, canAccept = false }) {
   const [currentVote, setCurrentVote] = useState(userVote);
@@ -23,16 +23,46 @@ export default function VoteButtons({ votes = 0, userVote = null, isAccepted = f
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4, minWidth: 40 }}>
-      <div onClick={() => handleVote("up")} style={{ cursor: "pointer", fontSize: 24, color: currentVote === "up" ? "#22c55e" : "var(--text-secondary)", transition: "color 0.2s", userSelect: "none", lineHeight: 1 }}>▲</div>
-      <span style={{ fontWeight: 700, fontSize: 20, color: "var(--text-primary)" }}>{count}</span>
-      <div onClick={() => handleVote("down")} style={{ cursor: "pointer", fontSize: 24, color: currentVote === "down" ? "#ef4444" : "var(--text-secondary)", transition: "color 0.2s", userSelect: "none", lineHeight: 1 }}>▼</div>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, minWidth: 48 }}>
+      <button
+        onClick={() => handleVote("up")}
+        style={{
+          width: 40, height: 40, borderRadius: 8, border: "1px solid var(--border-color)",
+          background: currentVote === "up" ? "rgba(34,197,94,0.1)" : "transparent",
+          color: currentVote === "up" ? "#22c55e" : "var(--text-secondary)",
+          cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 18, transition: "all 0.2s",
+        }}
+      >
+        <CaretUpFilled />
+      </button>
+      <span style={{ fontWeight: 700, fontSize: 18, color: "var(--text-primary)", padding: "4px 0" }}>{count}</span>
+      <button
+        onClick={() => handleVote("down")}
+        style={{
+          width: 40, height: 40, borderRadius: 8, border: "1px solid var(--border-color)",
+          background: currentVote === "down" ? "rgba(239,68,68,0.1)" : "transparent",
+          color: currentVote === "down" ? "#ef4444" : "var(--text-secondary)",
+          cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 18, transition: "all 0.2s",
+        }}
+      >
+        <CaretDownFilled />
+      </button>
       {showAccept && (
-        <div onClick={canAccept ? onAccept : undefined}
-          style={{ marginTop: 8, fontSize: 24, color: isAccepted ? "#22c55e" : "var(--text-secondary)", cursor: canAccept ? "pointer" : "default", transition: "color 0.2s" }}
-          title={isAccepted ? "Accepted answer" : canAccept ? "Accept this answer" : ""}>
+        <button
+          onClick={canAccept ? onAccept : undefined}
+          style={{
+            marginTop: 8, width: 40, height: 40, borderRadius: 8, border: "none",
+            background: isAccepted ? "rgba(34,197,94,0.1)" : "transparent",
+            color: isAccepted ? "#22c55e" : "var(--text-secondary)",
+            cursor: canAccept ? "pointer" : "default", display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 22, transition: "all 0.2s",
+          }}
+          title={isAccepted ? "Accepted answer" : canAccept ? "Accept this answer" : ""}
+        >
           <CheckCircleFilled />
-        </div>
+        </button>
       )}
     </div>
   );
