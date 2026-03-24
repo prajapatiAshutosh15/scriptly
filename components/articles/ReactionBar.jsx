@@ -16,7 +16,6 @@ export default function ReactionBar({ slug, postId, initialLikes = 0, initialIsL
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   const handleLike = useCallback(async () => {
-    if (!isAuthenticated) { router.push("/signin"); return; }
     try {
       if (liked) {
         await api.delete(`/posts/${slug}/like`);

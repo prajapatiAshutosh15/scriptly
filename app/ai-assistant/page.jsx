@@ -2,10 +2,11 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Input, Button, Card, Avatar, Typography } from "antd";
-import { SendOutlined, RobotOutlined, UserOutlined } from "@ant-design/icons";
+import { SendOutlined, RobotOutlined } from "@ant-design/icons";
 import { useAuthStore } from "@/stores/authStore";
 import ArticleContent from "@/components/articles/ArticleContent";
 import api from "@/services/api";
+import { getDefaultAvatar } from "@/lib/utils";
 
 const THINKING_MESSAGES = [
   "Searching the community knowledge base...",
@@ -126,11 +127,15 @@ export default function AiAssistantPage() {
             flexDirection: msg.role === "user" ? "row-reverse" : "row",
             alignItems: "flex-start",
           }}>
-            <Avatar size={28} style={{
-              background: msg.role === "user" ? "#2563eb" : "#e5873a",
-              flexShrink: 0, fontSize: 12,
-            }}>
-              {msg.role === "user" ? (user?.name?.[0] || <UserOutlined />) : <RobotOutlined />}
+            <Avatar
+              size={28}
+              src={msg.role === "user" ? (user?.avatar || getDefaultAvatar(user?.username)) : undefined}
+              style={{
+                background: msg.role === "user" ? "#2563eb" : "#e5873a",
+                flexShrink: 0, fontSize: 12,
+              }}
+            >
+              {msg.role === "assistant" && <RobotOutlined />}
             </Avatar>
             <div style={{
               maxWidth: "80%", borderRadius: 12, padding: "10px 14px",

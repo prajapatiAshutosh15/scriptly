@@ -20,7 +20,6 @@ const ArticleCard = ({ post, featured = false }) => {
   const handleLike = useCallback(async (e) => {
     e.stopPropagation();
     e.preventDefault();
-    if (!isAuthenticated) { router.push("/signin"); return; }
     try {
       if (liked) {
         await api.delete(`/posts/${post.slug}/like`);

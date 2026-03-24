@@ -1,12 +1,12 @@
 import Link from "next/link";
 import Avatar from "@/components/ui/Avatar";
-import { getRelativeTime } from "@/lib/utils";
+import { getRelativeTime, getDefaultAvatar } from "@/lib/utils";
 
 export default function ArticleMeta({ author, publishedAt, readTime, likes, comments }) {
   return (
     <div className="flex items-center gap-3">
       <Link href={`/user/${author?.username || ""}`}>
-        <Avatar src={author?.avatar} alt={author?.name} size="sm" />
+        <Avatar src={author?.avatar || getDefaultAvatar(author?.username)} alt={author?.name} size="sm" />
       </Link>
       <div className="flex flex-col">
         <Link href={`/user/${author?.username || ""}`} className="text-sm font-medium text-gray-900 dark:text-white hover:text-primary transition-colors">
