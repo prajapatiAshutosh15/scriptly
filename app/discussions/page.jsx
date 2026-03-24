@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Segmented, Skeleton } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import LeftSidebar from "@/components/layout/LeftSidebar";
 import Sidebar from "@/components/layout/Sidebar";
 import DiscussionCard from "@/components/discussions/DiscussionCard";
 import EmptyState from "@/components/shared/EmptyState";
@@ -41,7 +40,6 @@ export default function DiscussionsPage() {
 
   return (
     <div className="app-layout">
-      <LeftSidebar />
       <main className="main-feed">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
           <h1 style={{ fontSize: 28, fontWeight: 700, margin: 0, color: "var(--text-primary)" }}>Discussions</h1>

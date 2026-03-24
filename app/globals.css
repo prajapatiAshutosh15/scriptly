@@ -130,14 +130,24 @@ main {
 .mobile-only { display: none !important; }
 
 /* ═══════════════════════════════════════ */
-/* APP LAYOUT — 3-column grid             */
+/* GLOBAL LAYOUT — sidebar + content      */
+/* ═══════════════════════════════════════ */
+
+.global-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  max-width: 1440px;
+  margin: 0 auto;
+  min-height: calc(100vh - 64px);
+}
+
+/* ═══════════════════════════════════════ */
+/* APP LAYOUT — 3-column grid (with right sidebar) */
 /* ═══════════════════════════════════════ */
 
 .app-layout {
   display: grid;
-  grid-template-columns: 240px 1fr 320px;
-  max-width: 1440px;
-  margin: 0 auto;
+  grid-template-columns: 1fr 320px;
   min-height: calc(100vh - 64px);
 }
 
@@ -264,14 +274,15 @@ main {
 
 /* Large screens and below (≤1280px) — hide right sidebar */
 @media (max-width: 1280px) {
-  .app-layout { grid-template-columns: 240px 1fr !important; }
+  .app-layout { grid-template-columns: 1fr !important; }
   .right-sidebar, .app-layout > div:last-child { display: none !important; }
 }
 
 /* Tablet and below (≤1024px) — hide left sidebar */
 @media (max-width: 1024px) {
+  .global-layout { grid-template-columns: 1fr !important; }
   .app-layout { grid-template-columns: 1fr !important; }
-  .left-sidebar, .app-layout > aside { display: none !important; }
+  .left-sidebar, .global-layout > aside { display: none !important; }
   .mobile-only { display: inline-flex !important; }
   .hidden-mobile { display: none !important; }
   .main-feed { padding: 16px !important; }

@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Segmented, Select, Skeleton } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import LeftSidebar from "@/components/layout/LeftSidebar";
 import Sidebar from "@/components/layout/Sidebar";
 import QuestionList from "@/components/questions/QuestionList";
 import { useQuestions } from "@/hooks/useQuestions";
@@ -46,7 +45,6 @@ export default function QuestionsPage() {
 
   return (
     <div className="app-layout">
-      <LeftSidebar />
       <main className="main-feed">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
           <h1 style={{ fontSize: 28, fontWeight: 700, margin: 0, color: "var(--text-primary)" }}>Questions</h1>
