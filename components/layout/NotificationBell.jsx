@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Badge, Dropdown, Typography, Button } from "antd";
 import { BellOutlined } from "@ant-design/icons";
 import { useAuthStore } from "@/stores/authStore";
@@ -7,20 +7,43 @@ import { useNotificationStore } from "@/stores/notificationStore";
 import { useNotifications } from "@/hooks/useNotifications";
 import { getRelativeTime } from "@/lib/utils";
 
+function requestDesktopPermission() {
+  if (typeof window !== "undefined" && "Notification" in window && Notification.permission === "default") {
+    Notification.requestPermission();
+  }
+}
+
+function showDesktopNotification(title, body) {
+  if (typeof window === "undefined" || !("Notification" in window)) return;
+  if (Notification.permission === "granted") {
+    new Notification(title, { body, icon: "/favicon.ico", tag: "tle-ai-notif" });
+  }
+}
+
 export default function NotificationBell() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const unreadCount = useNotificationStore((s) => s.unreadCount);
+  const prevCount = useRef(unreadCount);
   const { fetchUnreadCount, fetchNotifications, markAllAsRead } = useNotifications();
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
+      requestDesktopPermission();
       fetchUnreadCount();
       const interval = setInterval(fetchUnreadCount, 30000);
       return () => clearInterval(interval);
     }
   }, [isAuthenticated]);
+
+  // Show desktop notification when new unread arrives
+  useEffect(() => {
+    if (unreadCount > prevCount.current && prevCount.current !== undefined) {
+      showDesktopNotification("TLE.ai", `You have ${unreadCount} new notification${unreadCount > 1 ? "s" : ""}`);
+    }
+    prevCount.current = unreadCount;
+  }, [unreadCount]);
 
   const handleOpen = async (visible) => {
     setOpen(visible);

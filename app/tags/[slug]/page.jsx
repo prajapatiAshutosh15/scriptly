@@ -1,41 +1,80 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
-import { Tag, Skeleton, Button, Segmented } from "antd";
+import { useState, useEffect, useCallback } from "react";
+import { useParams, useRouter } from "next/navigation";
+import { Tag, Skeleton, Button, Segmented, message } from "antd";
+import { PlusOutlined, CheckOutlined } from "@ant-design/icons";
 import ArticleCard from "@/components/articles/ArticleCard";
 import QuestionCard from "@/components/questions/QuestionCard";
 import EmptyState from "@/components/shared/EmptyState";
 import { useTags } from "@/hooks/useTags";
 import { normalizePost, normalizeQuestion } from "@/lib/normalizers";
+import { useAuthStore } from "@/stores/authStore";
+import api from "@/services/api";
 
 export default function TagDetailPage() {
   const { slug } = useParams();
+  const router = useRouter();
   const { fetchTags } = useTags();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const [tag, setTag] = useState(null);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("posts");
+  const [followingTag, setFollowingTag] = useState(false);
+  const [followLoading, setFollowLoading] = useState(false);
 
   useEffect(() => { loadTag(); }, [slug]);
 
   const loadTag = async () => {
     setLoading(true);
     try {
-      const api = (await import("@/services/api")).default;
       const tagRes = await api.get(`/tags/${slug}`);
-      setTag(tagRes.data?.tag);
+      const tagData = tagRes.data?.tag;
+      setTag(tagData);
+      setFollowingTag(tagData?.isFollowing || false);
       const postsRes = await api.get(`/tags/${slug}/posts`, { params: { limit: 20 } });
       setPosts(postsRes.data?.posts || []);
     } catch {}
     finally { setLoading(false); }
   };
 
+  const handleFollowTag = useCallback(async () => {
+    if (!isAuthenticated) { router.push("/signin"); return; }
+    setFollowLoading(true);
+    try {
+      if (followingTag) {
+        await api.delete(`/tags/${slug}/follow`);
+        setFollowingTag(false);
+        message.success("Unfollowed tag");
+      } else {
+        await api.post(`/tags/${slug}/follow`);
+        setFollowingTag(true);
+        message.success("Following tag!");
+      }
+    } catch {
+      message.error("Failed");
+    } finally {
+      setFollowLoading(false);
+    }
+  }, [followingTag, slug, isAuthenticated, router]);
+
   if (loading) return <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 24px" }}><Skeleton active paragraph={{ rows: 10 }} /></div>;
 
   return (
     <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 24px" }}>
       <div style={{ marginBottom: 24 }}>
-        <Tag color={tag?.color} style={{ borderRadius: 12, fontSize: 18, fontWeight: 700, padding: "4px 16px" }}>{tag?.name}</Tag>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+          <Tag color={tag?.color} style={{ borderRadius: 12, fontSize: 18, fontWeight: 700, padding: "4px 16px" }}>{tag?.name}</Tag>
+          <Button
+            type={followingTag ? "default" : "primary"}
+            shape="round"
+            icon={followingTag ? <CheckOutlined /> : <PlusOutlined />}
+            loading={followLoading}
+            onClick={handleFollowTag}
+          >
+            {followingTag ? "Following" : "Follow"}
+          </Button>
+        </div>
         {tag?.description && <p style={{ color: "var(--text-secondary)", marginTop: 8, fontSize: 14 }}>{tag.description}</p>}
         <div style={{ display: "flex", gap: 16, marginTop: 8, fontSize: 13, color: "var(--text-secondary)" }}>
           <span>{tag?.post_count || 0} posts</span>
