@@ -145,9 +145,13 @@ export default function AiAssistantPage() {
               <ArticleContent content={msg.content} />
               {msg.source && (
                 <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px solid var(--border-color)" }}>
-                  <a href={msg.source.type === "post" ? `/post/${msg.source.slug}` : `/questions/${msg.source.slug}`}
+                  <a href={
+                    msg.source.type === "post" ? `/post/${msg.source.slug}` :
+                    msg.source.type === "discussion" || msg.source.type === "discussion_reply" ? `/discussions/${msg.source.slug}` :
+                    `/questions/${msg.source.slug}`
+                  }
                     style={{ fontSize: 12, color: "#6db3f2", textDecoration: "none", display: "flex", alignItems: "center", gap: 4 }}>
-                    📄 {msg.source.title || "Source"} — by @{msg.source.author_username || ""}
+                    {msg.source.type === "discussion" || msg.source.type === "discussion_reply" ? "💬" : "📄"} {msg.source.title || "Source"} — by @{msg.source.author_username || ""}
                   </a>
                 </div>
               )}

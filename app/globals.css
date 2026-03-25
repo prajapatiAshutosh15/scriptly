@@ -323,9 +323,22 @@ main {
 @media (max-width: 768px) {
   .hidden-mobile { display: none !important; }
   .mobile-only { display: inline-flex !important; }
-  .nav-links-desktop, .search-desktop { display: none !important; }
+  .nav-links-desktop { display: none !important; }
+  .search-desktop {
+    position: fixed !important;
+    top: 65px;
+    left: 0;
+    right: 0;
+    z-index: 49;
+    padding: 8px 12px;
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--border-color);
+    max-width: 100% !important;
+    flex: unset !important;
+  }
 
-  .main-feed { padding: 12px !important; }
+  .main-feed { padding: 12px !important; padding-top: 68px !important; }
+  .global-layout > main { padding-top: 58px; }
 
   /* Feed post */
   .feed-post { padding: 14px !important; }
@@ -505,6 +518,64 @@ main {
 .prose pre code { background: none; padding: 0; }
 .prose a { color: var(--link-blue); text-decoration: underline; }
 .prose img { border-radius: 8px; margin: 1.5rem 0; }
+
+/* ═══════════════════════════════════════ */
+/* SEARCH DROPDOWN                        */
+/* ═══════════════════════════════════════ */
+
+.search-dropdown-overlay {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: var(--card-bg, #1a1a2e);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.25);
+  max-height: 480px;
+  overflow-y: auto;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.search-dropdown-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background 0.12s;
+}
+
+.search-dropdown-item:hover,
+.search-dropdown-item.active {
+  background: var(--bg-surface-hover, rgba(255,255,255,0.05));
+}
+
+.search-dropdown-category {
+  padding: 10px 16px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-results mark {
+  background: rgba(229, 135, 58, 0.25);
+  color: inherit;
+  padding: 1px 3px;
+  border-radius: 3px;
+}
+
+.light .search-dropdown-overlay {
+  background: #ffffff;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+}
 
 /* ═══════════════════════════════════════ */
 /* TIPTAP EDITOR                          */

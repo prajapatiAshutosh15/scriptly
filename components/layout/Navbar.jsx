@@ -12,6 +12,7 @@ import {
 import { SITE_NAME } from "@/lib/constants";
 import { getDefaultAvatar } from "@/lib/utils";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import SearchDropdown from "@/components/search/SearchDropdown";
 import Logo from "@/components/brand/Logo";
 // import NotificationBell from "./NotificationBell";
 import { useAuthStore } from "@/stores/authStore";
@@ -29,7 +30,6 @@ const SIDEBAR_NAV = [
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [searchVal, setSearchVal] = useState("");
   const pathname = usePathname();
   const router = useRouter();
 
@@ -37,10 +37,6 @@ export default function Navbar() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
-
-  const handleSearch = (value) => {
-    if (value.trim()) router.push(`/search?q=${encodeURIComponent(value.trim())}`);
-  };
 
   // Ctrl+K → open AI Assistant
   useEffect(() => {
@@ -96,22 +92,9 @@ export default function Navbar() {
             <Logo size={36} showText={true} textSize={20} />
           </Link>
 
-          {/* Search - Centered, wide */}
-          <div className="search-desktop" style={{ flex: "1 1 480px", maxWidth: 560 }}>
-            <Input
-              placeholder="Search..."
-              prefix={<SearchOutlined style={{ color: "var(--text-secondary)", fontSize: 13 }} />}
-              value={searchVal}
-              onChange={(e) => setSearchVal(e.target.value)}
-              onPressEnter={() => handleSearch(searchVal)}
-              style={{
-                borderRadius: 20,
-                fontSize: 13,
-                border: "1px solid var(--border-color)",
-                background: "var(--bg-surface)",
-              }}
-              allowClear
-            />
+          {/* Search - Instant dropdown */}
+          <div className="search-desktop" style={{ flex: "1 1 600px", maxWidth: 680 }}>
+            <SearchDropdown />
           </div>
 
           {/* Actions */}
