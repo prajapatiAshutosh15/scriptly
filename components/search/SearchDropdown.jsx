@@ -261,8 +261,16 @@ export default function SearchDropdown() {
 
           {/* No results */}
           {showResults && !loading && !hasResults && (
-            <div style={{ padding: "24px 16px", textAlign: "center", color: "var(--text-secondary)", fontSize: 13 }}>
-              No results for &ldquo;{query}&rdquo;
+            <div style={{ padding: "24px 16px", textAlign: "center" }}>
+              <div style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 8 }}>
+                No results for &ldquo;{query}&rdquo;
+              </div>
+              <div
+                style={{ fontSize: 12, color: "#e5873a", cursor: "pointer" }}
+                onClick={goToSearch}
+              >
+                Press Enter for AI-powered search
+              </div>
             </div>
           )}
 

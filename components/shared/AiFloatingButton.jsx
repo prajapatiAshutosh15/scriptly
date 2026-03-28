@@ -6,11 +6,11 @@ import { usePathname } from "next/navigation";
 export default function AiFloatingButton() {
   const pathname = usePathname();
 
-  // Don't show on AI assistant page itself
-  if (pathname === "/ai-assistant") return null;
+  // Don't show on search page (search has built-in AI)
+  if (pathname === "/search") return null;
 
   return (
-    <Link href="/ai-assistant">
+    <Link href="/search">
       <div style={{
         position: "fixed",
         bottom: 24,

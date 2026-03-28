@@ -5,7 +5,7 @@ import { Avatar } from "antd";
 import {
   HomeOutlined, QuestionCircleOutlined, MessageOutlined,
   TagsOutlined, CompassOutlined, BookOutlined,
-  SettingOutlined, RobotOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import { useAuthStore } from "@/stores/authStore";
 import { getDefaultAvatar } from "@/lib/utils";
@@ -13,7 +13,7 @@ import { getDefaultAvatar } from "@/lib/utils";
 const ICON_MAP = {
   HomeOutlined, QuestionCircleOutlined, MessageOutlined,
   TagsOutlined, CompassOutlined, BookOutlined,
-  SettingOutlined, RobotOutlined,
+  SettingOutlined,
 };
 
 const GENERAL = [
@@ -22,7 +22,6 @@ const GENERAL = [
   { label: "Discussions", href: "/discussions", icon: "MessageOutlined" },
   { label: "Tags", href: "/tags", icon: "TagsOutlined" },
   { label: "Explore", href: "/explore", icon: "CompassOutlined" },
-  { label: "AI Assistant", href: "/ai-assistant", icon: "RobotOutlined" },
 ];
 
 const YOU = [

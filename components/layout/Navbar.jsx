@@ -7,7 +7,7 @@ import {
   SearchOutlined, MenuOutlined, UserOutlined, LogoutOutlined,
   BookOutlined, SettingOutlined, EditOutlined,
   HomeOutlined, QuestionCircleOutlined, MessageOutlined,
-  TagsOutlined, CompassOutlined, BellOutlined, RobotOutlined,
+  TagsOutlined, CompassOutlined, BellOutlined,
 } from "@ant-design/icons";
 import { SITE_NAME } from "@/lib/constants";
 import { getDefaultAvatar } from "@/lib/utils";
@@ -23,7 +23,6 @@ const SIDEBAR_NAV = [
   { label: "Discussions", href: "/discussions", icon: <MessageOutlined /> },
   { label: "Tags", href: "/tags", icon: <TagsOutlined /> },
   { label: "Explore", href: "/explore", icon: <CompassOutlined /> },
-  { label: "AI Assistant", href: "/ai-assistant", icon: <RobotOutlined /> },
   { label: "Bookmarks", href: "/bookmarks", icon: <BookOutlined /> },
   { label: "Settings", href: "/settings", icon: <SettingOutlined /> },
 ];
@@ -38,12 +37,12 @@ export default function Navbar() {
   const user = useAuthStore((s) => s.user);
   const logout = useAuthStore((s) => s.logout);
 
-  // Ctrl+K → open AI Assistant
+  // Ctrl+K → open Search
   useEffect(() => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
         e.preventDefault();
-        router.push("/ai-assistant");
+        router.push("/search");
       }
     };
     window.addEventListener("keydown", handleKeyDown);
