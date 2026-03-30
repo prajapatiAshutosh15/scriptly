@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Input, Avatar, Tag, Spin } from "antd";
 import {
   SearchOutlined, FileTextOutlined, QuestionCircleOutlined,
@@ -40,7 +40,6 @@ const TYPE_LABELS = { posts: "Posts", questions: "Questions", tags: "Tags", user
 export default function SearchDropdown() {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const { suggest } = useSearch();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState(null);
@@ -57,13 +56,21 @@ export default function SearchDropdown() {
     setRecentSearches(loadRecent());
   }, []);
 
-  // Sync search bar text with URL query when on /search page
+  // Sync search bar with URL query (on initial load + follow-up clicks)
   useEffect(() => {
     if (pathname === "/search") {
-      const urlQuery = searchParams.get("q") || "";
-      setQuery(urlQuery);
+      const params = new URLSearchParams(window.location.search);
+      const urlQuery = params.get("q") || "";
+      if (urlQuery) setQuery(urlQuery);
     }
-  }, [pathname, searchParams]);
+  }, [pathname]);
+
+  // Listen for search query changes from follow-up clicks
+  useEffect(() => {
+    const handler = (e) => setQuery(e.detail || "");
+    window.addEventListener("search-query-change", handler);
+    return () => window.removeEventListener("search-query-change", handler);
+  }, []);
 
   // Click outside to close
   useEffect(() => {

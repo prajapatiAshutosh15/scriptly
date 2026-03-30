@@ -80,6 +80,7 @@ function SearchContent() {
 
   const handleFollowUp = (question) => {
     setActiveType("");
+    window.dispatchEvent(new CustomEvent("search-query-change", { detail: question }));
     router.push(`/search?q=${encodeURIComponent(question)}`);
   };
 
