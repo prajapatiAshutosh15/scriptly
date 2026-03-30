@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Input, Avatar, Tag, Spin } from "antd";
 import {
   SearchOutlined, FileTextOutlined, QuestionCircleOutlined,
@@ -39,6 +39,8 @@ const TYPE_LABELS = { posts: "Posts", questions: "Questions", tags: "Tags", user
 
 export default function SearchDropdown() {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { suggest } = useSearch();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState(null);
@@ -54,6 +56,14 @@ export default function SearchDropdown() {
   useEffect(() => {
     setRecentSearches(loadRecent());
   }, []);
+
+  // Sync search bar text with URL query when on /search page
+  useEffect(() => {
+    if (pathname === "/search") {
+      const urlQuery = searchParams.get("q") || "";
+      setQuery(urlQuery);
+    }
+  }, [pathname, searchParams]);
 
   // Click outside to close
   useEffect(() => {

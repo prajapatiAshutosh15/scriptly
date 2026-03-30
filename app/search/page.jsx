@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Input, Segmented, Typography, Card, Avatar, Tag, Skeleton } from "antd";
+import { Segmented, Typography, Card, Avatar, Tag, Skeleton } from "antd";
 import {
-  SearchOutlined, FileTextOutlined, QuestionCircleOutlined,
+  FileTextOutlined, QuestionCircleOutlined,
   MessageOutlined, TagOutlined, UserOutlined, CheckCircleFilled,
 } from "@ant-design/icons";
 import Link from "next/link";
@@ -78,13 +78,6 @@ function SearchContent() {
     return () => { cancelled = true; };
   }, [query]);
 
-  const handleSearch = (value) => {
-    if (value.trim()) {
-      setActiveType("");
-      router.push(`/search?q=${encodeURIComponent(value.trim())}`);
-    }
-  };
-
   const handleFollowUp = (question) => {
     setActiveType("");
     router.push(`/search?q=${encodeURIComponent(question)}`);
@@ -110,18 +103,14 @@ function SearchContent() {
 
   return (
     <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px 24px" }}>
-      {/* Search bar */}
-      <div style={{ maxWidth: 640, margin: "0 auto 32px" }}>
-        <Input.Search
-          placeholder="Ask anything or search the community..."
-          defaultValue={query}
-          onSearch={handleSearch}
-          size="large"
-          enterButton
-          style={{ borderRadius: 24 }}
-          prefix={<SearchOutlined />}
-        />
-      </div>
+      {/* Query label */}
+      {query && (
+        <div style={{ marginBottom: 20 }}>
+          <Text style={{ fontSize: 15, color: "var(--text-secondary)" }}>
+            Results for &ldquo;<Text strong style={{ color: "var(--text-primary)" }}>{query}</Text>&rdquo;
+          </Text>
+        </div>
+      )}
 
       {query ? (
         <div className="search-layout" style={{
